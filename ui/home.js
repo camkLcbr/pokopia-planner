@@ -25,13 +25,15 @@ export class HomeScreen {
     const cities = Object.values(this.citiesData);
 
     this.container.innerHTML = `
-      <h1>${icon('building-2', 32)} ${t('home.title')}</h1>
-      <p class="welcome-subtitle">
-        ${t('home.subtitle')}
-      </p>
+      <div class="welcome-content">
+        <h1>${icon('building-2', 32)} ${t('home.title')}</h1>
+        <p class="welcome-subtitle">
+          ${t('home.subtitle')}
+        </p>
 
-      <div class="cities-grid">
-        ${cities.map(city => this.renderCityCard(city)).join('')}
+        <div class="cities-grid">
+          ${cities.map(city => this.renderCityCard(city)).join('')}
+        </div>
       </div>
     `;
 

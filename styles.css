@@ -590,14 +590,25 @@ i[data-lucide] svg {
   color: #726a5a;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   z-index: 1000;
   padding: 40px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .welcome.hidden {
   display: none;
+}
+
+.welcome-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
 }
 
 .welcome h1 {
@@ -856,15 +867,20 @@ i[data-lucide] svg {
   }
 
   /* Home screen ajustements */
-  .home-screen {
-    padding: 20px 16px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+  .welcome {
+    padding: 24px 16px;
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+
+  .welcome-content {
+    margin: 0;
   }
 
   .welcome h1 {
     font-size: 32px;
     margin-bottom: 12px;
+    margin-top: 16px;
     letter-spacing: -0.3px;
   }
 
@@ -922,13 +938,16 @@ i[data-lucide] svg {
    RESPONSIVE - PETITS MOBILES
    ========================= */
 @media (max-width: 480px) {
-  .home-screen {
-    padding: 16px 12px;
+  .welcome {
+    padding: 20px 12px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
   }
 
   .welcome h1 {
     font-size: 28px;
     margin-bottom: 10px;
+    margin-top: 12px;
   }
 
   .welcome-subtitle {
