@@ -11,6 +11,7 @@ import { SettingsToolbar } from './ui/settings-toolbar.js';
 import { HomeScreen } from './ui/home.js';
 import { MapLoader } from './core/map-loader.js';
 import { BackgroundImage } from './core/background-image.js';
+import { t } from './utils/i18n.js';
 
 class PokopiaPlannerApp {
   constructor() {
@@ -239,6 +240,11 @@ class PokopiaPlannerApp {
       if (settingsEl) {
         // Element trouvé, on peut initialiser
         this.settingsToolbar = new SettingsToolbar('settings-toolbar');
+
+        // Connecte le callback de retour à l'accueil
+        this.settingsToolbar.setOnHome(() => {
+          this.returnToHome();
+        });
 
         // Connecte les callbacks Undo/Redo
         this.settingsToolbar.setOnUndo(() => {
@@ -513,6 +519,40 @@ class PokopiaPlannerApp {
   }
 
   /**
+   * Retour à l'écran d'accueil
+   */
+  returnToHome() {
+    // Si des modifications non sauvegardées existent, demander confirmation
+    if (this.hasUnsavedChanges) {
+      const result = confirm(t('message.confirmLeave'));
+
+      if (result === true) {
+        // L'utilisateur a cliqué sur "OK" - sauvegarder et quitter
+        this.saveMap();
+      } else if (result === false) {
+        // L'utilisateur a cliqué sur "Annuler" - ne rien faire
+        console.log(t('message.leaveCancelled'));
+        return;
+      }
+    }
+
+    // Masque l'éditeur
+    const editor = document.getElementById('editor');
+    if (editor) {
+      editor.style.display = 'none';
+    }
+
+    // Affiche l'écran d'accueil
+    if (this.homeScreen) {
+      this.homeScreen.show();
+    }
+
+    // Réinitialise l'état
+    this.hasUnsavedChanges = false;
+    this.currentCity = null;
+  }
+
+  /**
    * Exporte la carte en JSON
    */
   exportMap() {
@@ -553,15 +593,15 @@ class PokopiaPlannerApp {
       const data = JSON.parse(text);
 
       if (!data.map) {
-        throw new Error('Format JSON invalide : champ "map" manquant');
+        throw new Error(t('message.invalidFormat'));
       }
 
       // Demande confirmation avant d'écraser la carte actuelle
       const cityName = data.cityName || data.cityId || 'cette carte';
-      const confirmMsg = `Importer "${cityName}" ?\n\nCette action écrasera la carte actuelle.`;
+      const confirmMsg = t('message.confirmImport', { name: cityName });
 
       if (!confirm(confirmMsg)) {
-        console.log('❌ Import annulé par l\'utilisateur');
+        console.log(t('message.importCancelled'));
         return;
       }
 
@@ -572,10 +612,10 @@ class PokopiaPlannerApp {
       this.render();
 
       console.log('✅ Carte importée:', cityName);
-      alert(`Carte "${cityName}" importée avec succès !`);
+      alert(t('message.imported'));
     } catch (error) {
       console.error('❌ Erreur lors de l\'import:', error);
-      alert(`Erreur lors de l'import du fichier:\n${error.message}`);
+      alert(`${t('message.importError')}:\n${error.message}`);
     }
   }
 
@@ -591,7 +631,7 @@ class PokopiaPlannerApp {
       document.body.appendChild(indicator);
     }
 
-    indicator.textContent = '✓ Sauvegardé';
+    indicator.textContent = t('message.saved');
     indicator.classList.add('show');
 
     setTimeout(() => {
@@ -628,10 +668,10 @@ class PokopiaPlannerApp {
         this.settingsToolbar.setupBackgroundControls();
       }
 
-      console.log('✅ Image de fond chargée');
+      console.log(t('message.imageLoaded'));
     } catch (error) {
       console.error('❌ Erreur lors du chargement de l\'image:', error);
-      alert('Erreur lors du chargement de l\'image');
+      alert(t('message.imageError'));
     }
   }
 
@@ -642,7 +682,7 @@ class PokopiaPlannerApp {
     if (this.backgroundImage) {
       const enabled = this.backgroundImage.toggle();
       this.render();
-      console.log(`🖼️ Image de fond: ${enabled ? 'activée' : 'désactivée'}`);
+      console.log(enabled ? t('message.imageToggleOn') : t('message.imageToggleOff'));
     }
   }
 

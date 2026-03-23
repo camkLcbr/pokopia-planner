@@ -3,6 +3,7 @@
  */
 
 import { icon, initIcons, categoryIcons, toolIcons } from '../utils/icons.js';
+import { i18n, t } from '../utils/i18n.js';
 
 export class CategoryToolbar {
   constructor(containerId, tilesData, onTileSelect) {
@@ -23,37 +24,37 @@ export class CategoryToolbar {
     this.categories = {
       terrain: {
         icon: categoryIcons.terrain,
-        name: 'Terrains',
+        nameKey: 'category.terrain',
         filter: (tile) => tile.category === 'terrain'
       },
       buildings: {
         icon: categoryIcons.buildings,
-        name: 'Bâtiments',
+        nameKey: 'category.buildings',
         filter: (tile) => tile.category === 'buildings'
       },
       decor: {
         icon: categoryIcons.decor,
-        name: 'Décors',
+        nameKey: 'category.decor',
         filter: (tile) => tile.category === 'decor'
       },
       habitat: {
         icon: categoryIcons.habitat,
-        name: 'Habitats',
+        nameKey: 'category.habitat',
         filter: (tile) => tile.category === 'habitat'
       },
       tools: {
         icon: categoryIcons.tools,
-        name: 'Outils',
+        nameKey: 'category.tools',
         special: true
       }
     };
 
     this.tools = {
-      brush: { icon: toolIcons.brush, name: 'Brosse' },
-      erase: { icon: toolIcons.erase, name: 'Gomme' },
-      fill: { icon: toolIcons.fill, name: 'Remplir' },
-      rectangle: { icon: toolIcons.rectangle, name: 'Rectangle' },
-      eyedropper: { icon: toolIcons.eyedropper, name: 'Pipette' }
+      brush: { icon: toolIcons.brush, nameKey: 'tool.brush' },
+      erase: { icon: toolIcons.erase, nameKey: 'tool.erase' },
+      fill: { icon: toolIcons.fill, nameKey: 'tool.fill' },
+      rectangle: { icon: toolIcons.rectangle, nameKey: 'tool.rectangle' },
+      eyedropper: { icon: toolIcons.eyedropper, nameKey: 'tool.eyedropper' }
     };
 
     // Taille de pinceau
@@ -62,6 +63,9 @@ export class CategoryToolbar {
 
     // Couleur de la tuile active (pour colorer les icônes)
     this.currentTileColor = '#726a5a'; // Couleur par défaut (gris terre)
+
+    // Écoute les changements de langue pour re-render
+    i18n.onChange(() => this.onLanguageChange());
 
     this.render();
     this.setupEventListeners();
@@ -77,7 +81,7 @@ export class CategoryToolbar {
           <button
             class="category-btn ${this.currentCategory === key ? 'active' : ''}"
             data-category="${key}"
-            title="${cat.name}"
+            title="${t(cat.nameKey)}"
           >
             ${icon(cat.icon, 24)}
           </button>
@@ -170,7 +174,7 @@ export class CategoryToolbar {
     const tiles = Object.values(this.tilesData).filter(categoryData.filter);
 
     if (tiles.length === 0) {
-      secondaryToolbar.innerHTML = '<div style="padding: 8px; color: #666; font-size: 12px;">Aucune tuile</div>';
+      secondaryToolbar.innerHTML = `<div style="padding: 8px; color: #666; font-size: 12px;">${t('brush.noTiles')}</div>`;
       return;
     }
 
@@ -202,10 +206,10 @@ export class CategoryToolbar {
         <button
           class="tool-btn ${this.currentTool === key ? 'active' : ''}"
           data-tool="${key}"
-          title="${tool.name}"
+          title="${t(tool.nameKey)}"
         >
           ${icon(tool.icon, 18, iconColor)}
-          <span class="tool-label">${tool.name}</span>
+          <span class="tool-label">${t(tool.nameKey)}</span>
         </button>
       `;
     }).join('');
@@ -213,9 +217,9 @@ export class CategoryToolbar {
     // Séparateur + Sélecteur de taille de pinceau
     const brushSizeHTML = `
       <div class="brush-size-separator"></div>
-      <div class="brush-size-label">Taille du pinceau</div>
+      <div class="brush-size-label">${t('brush.label')}</div>
       <div class="brush-size-control">
-        <button class="brush-size-btn-minus" id="brush-size-minus" title="Diminuer (Min: 1)">
+        <button class="brush-size-btn-minus" id="brush-size-minus" title="${t('brush.decrease')}">
           ${icon('minus', 16)}
         </button>
         <input
@@ -225,9 +229,9 @@ export class CategoryToolbar {
           value="${this.currentBrushSize}"
           min="1"
           max="16"
-          title="Taille du pinceau (1-16)"
+          title="${t('brush.size')}"
         />
-        <button class="brush-size-btn-plus" id="brush-size-plus" title="Augmenter (Max: 16)">
+        <button class="brush-size-btn-plus" id="brush-size-plus" title="${t('brush.increase')}">
           ${icon('plus', 16)}
         </button>
       </div>
@@ -385,5 +389,23 @@ export class CategoryToolbar {
    */
   getCurrentTool() {
     return this.currentTool;
+  }
+
+  /**
+   * Gère les changements de langue
+   */
+  onLanguageChange() {
+    // Re-render la toolbar principale pour mettre à jour les tooltips
+    this.render();
+
+    // Si une catégorie est ouverte, re-render la toolbar secondaire
+    if (this.currentCategory) {
+      const categoryData = this.categories[this.currentCategory];
+      if (categoryData.special) {
+        this.renderToolsSecondary();
+      } else {
+        this.renderTilesSecondary(categoryData);
+      }
+    }
   }
 }

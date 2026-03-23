@@ -4,6 +4,7 @@
  */
 
 import { icon, initIcons, actionIcons } from '../utils/icons.js';
+import { i18n, t } from '../utils/i18n.js';
 
 export class SettingsToolbar {
   constructor(containerId) {
@@ -14,6 +15,9 @@ export class SettingsToolbar {
       return;
     }
 
+    // Écoute les changements de langue pour re-render
+    i18n.onChange(() => this.updateTooltips());
+
     this.render();
     this.setupEventListeners();
   }
@@ -22,24 +26,34 @@ export class SettingsToolbar {
    * Rendu de la toolbar
    */
   render() {
+    const currentLang = i18n.getLang();
+    const langFlag = currentLang === 'fr' ? '🇫🇷' : '🇬🇧';
+
     this.container.innerHTML = `
       <div class="settings-toolbar-content">
+        <!-- Retour à l'accueil -->
+        <button class="settings-btn home-btn" id="settings-home-btn" title="${t('tooltip.home')}">
+          ${icon('home', 20, 'black')}
+        </button>
+
+        <div class="settings-separator"></div>
+
         <!-- Historique -->
-        <button class="settings-btn undo-btn" id="settings-undo-btn" title="Annuler (Ctrl+Z)">
+        <button class="settings-btn undo-btn" id="settings-undo-btn" title="${t('tooltip.undo')}">
           ${icon(actionIcons.undo, 20, 'white')}
         </button>
-        <button class="settings-btn redo-btn" id="settings-redo-btn" title="Refaire (Ctrl+Y)">
+        <button class="settings-btn redo-btn" id="settings-redo-btn" title="${t('tooltip.redo')}">
           ${icon(actionIcons.redo, 20, 'white')}
         </button>
 
         <div class="settings-separator"></div>
 
         <!-- Image de fond -->
-        <label class="settings-btn background-image-btn" title="Charger image de fond">
+        <label class="settings-btn background-image-btn" title="${t('tooltip.backgroundImage')}">
           <input type="file" accept="image/*" id="settings-background-input" style="display: none;" />
           ${icon(actionIcons.backgroundImage, 20, 'white')}
         </label>
-        <button class="settings-btn background-toggle-btn" id="settings-background-toggle" style="display: none;" title="Toggle image">
+        <button class="settings-btn background-toggle-btn" id="settings-background-toggle" style="display: none;" title="${t('tooltip.backgroundToggle')}">
           ${icon(actionIcons.backgroundToggle, 20, 'white')}
         </button>
         <div id="settings-opacity-control" style="display: none; width: 48px; padding: 8px 0;">
@@ -51,16 +65,23 @@ export class SettingsToolbar {
         <div class="settings-separator"></div>
 
         <!-- Fichier -->
-        <button class="settings-btn save-btn" id="settings-save-btn" title="Sauvegarder (Ctrl+S)">
+        <button class="settings-btn save-btn" id="settings-save-btn" title="${t('tooltip.save')}">
           ${icon(actionIcons.save, 20, 'white')}
         </button>
-        <button class="settings-btn export-btn" id="settings-export-btn" title="Exporter en JSON">
+        <button class="settings-btn export-btn" id="settings-export-btn" title="${t('tooltip.export')}">
           ${icon(actionIcons.export, 20, 'white')}
         </button>
-        <label class="settings-btn import-btn" title="Importer JSON">
+        <label class="settings-btn import-btn" title="${t('tooltip.import')}">
           <input type="file" accept=".json" id="settings-import-input" style="display: none;" />
           ${icon(actionIcons.import, 20, 'white')}
         </label>
+
+        <div class="settings-separator"></div>
+
+        <!-- Langue -->
+        <button class="settings-btn language-btn" id="settings-language-btn" title="${t('tooltip.language')}">
+          <span style="font-size: 20px; line-height: 1;">${langFlag}</span>
+        </button>
       </div>
     `;
 
@@ -69,9 +90,62 @@ export class SettingsToolbar {
   }
 
   /**
+   * Met à jour uniquement les tooltips (plus léger que re-render complet)
+   */
+  updateTooltips() {
+    const buttons = {
+      'settings-home-btn': 'tooltip.home',
+      'settings-undo-btn': 'tooltip.undo',
+      'settings-redo-btn': 'tooltip.redo',
+      'settings-save-btn': 'tooltip.save',
+      'settings-export-btn': 'tooltip.export',
+      'settings-language-btn': 'tooltip.language',
+      'settings-background-toggle': 'tooltip.backgroundToggle',
+    };
+
+    Object.entries(buttons).forEach(([id, key]) => {
+      const btn = document.getElementById(id);
+      if (btn) btn.title = t(key);
+    });
+
+    // Tooltips pour les labels (qui contiennent des inputs cachés)
+    const backgroundImageLabel = this.container.querySelector('.background-image-btn');
+    if (backgroundImageLabel) {
+      backgroundImageLabel.title = t('tooltip.backgroundImage');
+    }
+
+    const importLabel = this.container.querySelector('.import-btn');
+    if (importLabel) {
+      importLabel.title = t('tooltip.import');
+    }
+
+    // Met à jour le drapeau
+    const langBtn = document.getElementById('settings-language-btn');
+    if (langBtn) {
+      const currentLang = i18n.getLang();
+      const langFlag = currentLang === 'fr' ? '🇫🇷' : '🇬🇧';
+      const span = langBtn.querySelector('span');
+      if (span) span.textContent = langFlag;
+    }
+
+    // Notifie le changement de langue
+    if (this.onLanguageChange) {
+      this.onLanguageChange(i18n.getLang());
+    }
+  }
+
+  /**
    * Event listeners
    */
   setupEventListeners() {
+    // Home
+    const homeBtn = document.getElementById('settings-home-btn');
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => {
+        if (this.onHome) this.onHome();
+      });
+    }
+
     // Undo
     const undoBtn = document.getElementById('settings-undo-btn');
     if (undoBtn) {
@@ -130,6 +204,14 @@ export class SettingsToolbar {
         }
       });
     }
+
+    // Language toggle
+    const langBtn = document.getElementById('settings-language-btn');
+    if (langBtn) {
+      langBtn.addEventListener('click', () => {
+        i18n.toggleLang();
+      });
+    }
   }
 
   /**
@@ -157,6 +239,10 @@ export class SettingsToolbar {
   }
 
   // Setters pour les callbacks
+  setOnHome(callback) {
+    this.onHome = callback;
+  }
+
   setOnUndo(callback) {
     this.onUndo = callback;
   }
@@ -187,5 +273,9 @@ export class SettingsToolbar {
 
   setOnImport(callback) {
     this.onImport = callback;
+  }
+
+  setOnLanguageChange(callback) {
+    this.onLanguageChange = callback;
   }
 }

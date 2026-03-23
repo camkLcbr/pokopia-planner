@@ -3,12 +3,16 @@
  */
 
 import { icon, initIcons } from '../utils/icons.js';
+import { i18n, t } from '../utils/i18n.js';
 
 export class HomeScreen {
   constructor(containerId, citiesData, onCitySelect) {
     this.container = document.getElementById(containerId);
     this.citiesData = citiesData;
     this.onCitySelect = onCitySelect;
+
+    // Écoute les changements de langue pour re-render
+    i18n.onChange(() => this.render());
 
     this.render();
     this.setupEventListeners();
@@ -21,9 +25,9 @@ export class HomeScreen {
     const cities = Object.values(this.citiesData);
 
     this.container.innerHTML = `
-      <h1>${icon('building-2', 32)} Pokopia City Planner</h1>
+      <h1>${icon('building-2', 32)} ${t('home.title')}</h1>
       <p class="welcome-subtitle">
-        Planifie ta ville Pokémon
+        ${t('home.subtitle')}
       </p>
 
       <div class="cities-grid">
@@ -40,27 +44,29 @@ export class HomeScreen {
    */
   renderCityCard(city) {
     const hasSave = this.checkSave(city.id);
+    const currentLang = i18n.getLang();
+    const cityName = currentLang === 'fr' ? (city.name_fr || city.name) : city.name;
 
     return `
       <div class="city-card" data-city="${city.id}">
-        <h3>${city.name_fr || city.name}</h3>
+        <h3>${cityName}</h3>
         <p>${city.description}</p>
 
         <div class="city-card-actions">
           ${hasSave
             ? `<button class="city-btn" data-action="load" data-city="${city.id}">
-                 ${icon('folder-open', 16)} Charger
+                 ${icon('folder-open', 16)} ${t('home.load')}
                </button>`
             : ''
           }
           <button class="city-btn ${!hasSave ? '' : 'secondary'}" data-action="new" data-city="${city.id}">
-            ${icon('sparkles', 16)} ${hasSave ? 'Nouveau' : 'Commencer'}
+            ${icon('sparkles', 16)} ${hasSave ? t('home.new') : t('home.start')}
           </button>
         </div>
 
         ${hasSave
           ? `<div style="margin-top: 12px; font-size: 12px; color: #999;">
-               ${icon('save', 14)} Dernière sauvegarde : ${this.getLastSaveDate(city.id)}
+               ${icon('save', 14)} ${t('home.lastSave')} : ${this.getLastSaveDate(city.id)}
              </div>`
           : ''
         }
@@ -131,7 +137,7 @@ export class HomeScreen {
    */
   newCity(cityId) {
     if (this.checkSave(cityId)) {
-      if (!confirm('Une sauvegarde existe déjà. La remplacer ?')) {
+      if (!confirm(t('home.confirmReplace'))) {
         return;
       }
     }
