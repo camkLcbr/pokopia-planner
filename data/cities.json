@@ -7,7 +7,7 @@
     "height": 384,
     "defaultTerrain": "field-grass",
     "backgroundColor": "#90EE90",
-    "description": "Petite ville paisible, lieu de départ de nombreux dresseurs"
+    "description": "Start a new town from scratch"
   },
   "withered-wasteland": {
     "id": "withered-wasteland",
@@ -17,7 +17,7 @@
     "height": 240,
     "defaultTerrain": "field-grass",
     "backgroundColor": "#7CB342",
-    "description": "Ville forestière avec une arène Pokémon redoutable"
+    "description": "Start of the adventure"
   },
   "rocky-ridges": {
     "id": "rocky-ridges",
@@ -27,7 +27,7 @@
     "height": 272,
     "defaultTerrain": "grey-rock",
     "backgroundColor": "#B0BEC5",
-    "description": "Ville rocheuse, célèbre pour son musée"
+    "description": "Rocky town, famous for its museum"
   },
   "bleak-beach": {
     "id": "bleak-beach",
@@ -37,7 +37,7 @@
     "height": 272,
     "defaultTerrain": "field-grass",
     "backgroundColor": "#64B5F6",
-    "description": "Ville au bord de l'eau, connue pour sa piscine"
+    "description": "Coastal town, famous for its swimming pool"
   },
   "sparkling-skylands": {
     "id": "sparkling-skylands",
@@ -47,6 +47,6 @@
     "height": 353,
     "defaultTerrain": "sand",
     "backgroundColor": "#FFB74D",
-    "description": "Port maritime animé avec le S.S. Anne"
+    "description": "Take some height and build your town in the sky"
   }
 }
