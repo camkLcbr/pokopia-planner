@@ -18,6 +18,7 @@ export class CategoryToolbar {
     this.onTileSelect = onTileSelect;
 
     this.currentCategory = null;
+    this.currentSubcategory = null; // Nouvelle propriété pour la sous-catégorie
     this.currentTool = 'brush';
 
     // Définition des catégories avec leurs icônes
@@ -25,7 +26,9 @@ export class CategoryToolbar {
       terrain: {
         icon: categoryIcons.terrain,
         nameKey: 'category.terrain',
-        filter: (tile) => tile.category === 'terrain'
+        filter: (tile) => tile.category === 'terrain',
+        hasSubcategories: true, // Indique que cette catégorie a des sous-catégories
+        subcategories: ['nature', 'chemins'] // Liste des sous-catégories
       },
       buildings: {
         icon: categoryIcons.buildings,
@@ -119,6 +122,13 @@ export class CategoryToolbar {
         this.selectTile(tileId);
       }
 
+      // Click sur une sous-catégorie
+      const subcategoryBtn = e.target.closest('.subcategory-btn');
+      if (subcategoryBtn) {
+        const subcategory = subcategoryBtn.dataset.subcategory;
+        this.selectSubcategory(subcategory);
+      }
+
       // Click sur un outil
       const toolBtn = e.target.closest('.tool-btn');
       if (toolBtn) {
@@ -144,12 +154,14 @@ export class CategoryToolbar {
     // Si on clique sur la catégorie déjà active, on la ferme
     if (this.currentCategory === category) {
       this.currentCategory = null;
+      this.currentSubcategory = null;
       secondaryToolbar.style.display = 'none';
       this.updateCategoryButtons();
       return;
     }
 
     this.currentCategory = category;
+    this.currentSubcategory = null; // Reset la sous-catégorie
     this.updateCategoryButtons();
 
     // Affiche la toolbar secondaire avec le contenu approprié
@@ -158,12 +170,46 @@ export class CategoryToolbar {
     if (categoryData.special) {
       // Cas spécial : outils
       this.renderToolsSecondary();
+    } else if (categoryData.hasSubcategories) {
+      // Affiche les sous-catégories
+      this.renderSubcategoriesSecondary(categoryData);
     } else {
       // Affiche les tiles de la catégorie
       this.renderTilesSecondary(categoryData);
     }
 
     secondaryToolbar.style.display = 'flex';
+  }
+
+  /**
+   * Rendu de la toolbar secondaire avec les sous-catégories
+   */
+  renderSubcategoriesSecondary(categoryData) {
+    const secondaryToolbar = document.getElementById('secondary-toolbar');
+
+    secondaryToolbar.innerHTML = categoryData.subcategories.map(subcategory => `
+      <button
+        class="subcategory-btn ${this.currentSubcategory === subcategory ? 'active' : ''}"
+        data-subcategory="${subcategory}"
+        title="${t('subcategory.' + subcategory)}"
+      >
+        <span class="subcategory-label">${t('subcategory.' + subcategory)}</span>
+      </button>
+    `).join('');
+  }
+
+  /**
+   * Sélectionne une sous-catégorie et affiche ses tiles
+   */
+  selectSubcategory(subcategory) {
+    this.currentSubcategory = subcategory;
+    const categoryData = this.categories[this.currentCategory];
+
+    // Filtre les tiles par catégorie ET sous-catégorie
+    const filter = (tile) =>
+      categoryData.filter(tile) && tile.subcategory === subcategory;
+
+    this.renderTilesSecondary({ filter });
   }
 
   /**
@@ -178,16 +224,23 @@ export class CategoryToolbar {
       return;
     }
 
-    secondaryToolbar.innerHTML = tiles.map(tile => `
-      <button
-        class="tile-btn"
-        data-tile="${tile.id}"
-        title="${tile.name}"
-        style="background: ${tile.gradient || tile.color};"
-      >
-        <span class="tile-name">${tile.name}</span>
-      </button>
-    `).join('');
+    secondaryToolbar.innerHTML = tiles.map(tile => {
+      // Si le tile a un sprite, on affiche l'image, sinon on garde la couleur
+      const backgroundStyle = tile.sprite
+        ? `background-image: url('${tile.sprite}'); background-size: cover; background-position: center;`
+        : `background: ${tile.gradient || tile.color};`;
+
+      return `
+        <button
+          class="tile-btn ${tile.sprite ? 'has-sprite' : ''}"
+          data-tile="${tile.id}"
+          title="${tile.name}"
+          style="${backgroundStyle}"
+        >
+          <span class="tile-name">${tile.name}</span>
+        </button>
+      `;
+    }).join('');
   }
 
   /**

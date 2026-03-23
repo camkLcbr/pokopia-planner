@@ -3,6 +3,7 @@
     "id": "water-blue",
     "name": "Water blue",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#2196F3",
     "sprite": null
@@ -11,6 +12,7 @@
     "id": "water-dark-blue",
     "name": "Water Dark Blue",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#003366",
     "sprite": null
@@ -19,6 +21,7 @@
     "id": "field-grass",
     "name": "Field grass",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#7CB342",
     "sprite": null
@@ -27,6 +30,7 @@
     "id": "sand",
     "name": "Sand",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#F4A460",
     "sprite": null
@@ -35,6 +39,7 @@
     "id": "grey-rock",
     "name": "Grey Rock",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#9E9E9E",
     "sprite": null
@@ -43,6 +48,7 @@
     "id": "seashore-grass",
     "name": "Seashore grass",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#8BC34A",
     "sprite": null
@@ -51,6 +57,7 @@
     "id": "dry-alpine-grass",
     "name": "Dry Alpine grass",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#C5E1A5",
     "sprite": null
@@ -59,38 +66,25 @@
     "id": "dark-rock",
     "name": "Dark rock",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#424242",
-    "sprite": null
-  },
-  "path": {
-    "id": "path",
-    "name": "Path",
-    "category": "terrain",
-    "size": [1, 1],
-    "color": "#D2B48C",
     "sprite": null
   },
   "hay": {
     "id": "hay",
     "name": "Hay",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#FFE082",
-    "sprite": null
-  },
-  "dirt": {
-    "id": "dirt",
-    "name": "Dirt",
-    "category": "terrain",
-    "size": [1, 1],
-    "color": "#8B4513",
     "sprite": null
   },
   "yellow-rock": {
     "id": "yellow-rock",
     "name": "Yellow Rock",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#FFD54F",
     "sprite": null
@@ -99,6 +93,7 @@
     "id": "brown-rock",
     "name": "Brown Rock",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#795548",
     "sprite": null
@@ -107,6 +102,7 @@
     "id": "sky-high-grass",
     "name": "Sky-High grass",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#AED581",
     "sprite": null
@@ -115,8 +111,72 @@
     "id": "green-grass",
     "name": "Green Grass",
     "category": "terrain",
+    "subcategory": "nature",
     "size": [1, 1],
     "color": "#4CAF50",
     "sprite": null
+  },
+  "arched": {
+    "id": "arched",
+    "name": "Arched",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#c3756f",
+    "sprite": "sprites/tiles/archedtiling.png"
+  },
+  "stone": {
+    "id": "stone",
+    "name": "Stone",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#B0B0B0",
+    "sprite": "sprites/tiles/stonetiling.png"
+  },
+  "square": {
+    "id": "square",
+    "name": "Square",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#C8C8C8",
+    "sprite": "sprites/tiles/squaretiling.png"
+  },
+  "brick": {
+    "id": "brick",
+    "name": "Brick",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#c07e4d",
+    "sprite": "sprites/tiles/brickflooring.png"
+  },
+  "stylish-stone": {
+    "id": "stylish-stone",
+    "name": "Stylish stone",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#9C9C9C",
+    "sprite": "sprites/tiles/stylishstoneflooring.png"
+  },
+  "terracotta": {
+    "id": "terracotta",
+    "name": "Mosaic",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#e7de90",
+    "sprite": "sprites/tiles/mosaictiling.png"
+  },
+  "asphalt": {
+    "id": "asphalt",
+    "name": "Asphalt",
+    "category": "terrain",
+    "subcategory": "chemins",
+    "size": [1, 1],
+    "color": "#3C3C3C",
+    "sprite": "sprites/tiles/asphaltroad.png"
   }
 }

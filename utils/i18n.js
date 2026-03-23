@@ -20,6 +20,10 @@ const translations = {
     'category.habitat': 'Habitats',
     'category.tools': 'Outils',
 
+    // Category Toolbar - Subcategories
+    'subcategory.nature': 'Nature',
+    'subcategory.chemins': 'Chemins',
+
     // Category Toolbar - Tools
     'tool.brush': 'Brosse',
     'tool.erase': 'Gomme',
@@ -76,6 +80,10 @@ const translations = {
     'category.decor': 'Decor',
     'category.habitat': 'Habitats',
     'category.tools': 'Tools',
+
+    // Category Toolbar - Subcategories
+    'subcategory.nature': 'Nature',
+    'subcategory.chemins': 'Paths',
 
     // Category Toolbar - Tools
     'tool.brush': 'Brush',
