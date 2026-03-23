@@ -825,7 +825,29 @@ i[data-lucide] svg {
   }
 }
 
+/* =========================
+   RESPONSIVE - TABLET
+   ========================= */
+@media (max-width: 1024px) {
+  .cities-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .welcome h1 {
+    font-size: 42px;
+  }
+
+  .welcome-subtitle {
+    font-size: 16px;
+  }
+}
+
+/* =========================
+   RESPONSIVE - MOBILE
+   ========================= */
 @media (max-width: 768px) {
+  /* Toolbar ajustements */
   .category-btn,
   .settings-btn {
     width: 44px;
@@ -833,11 +855,105 @@ i[data-lucide] svg {
     font-size: 20px;
   }
 
+  /* Home screen ajustements */
+  .home-screen {
+    padding: 20px 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .welcome h1 {
-    font-size: 36px;
+    font-size: 32px;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  .welcome-subtitle {
+    font-size: 15px;
+    margin-bottom: 24px;
+    line-height: 1.4;
   }
 
   .cities-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  .city-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .city-card h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .city-card p {
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .city-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .city-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  /* Désactive le hover sur mobile */
+  .city-card:hover {
+    transform: none;
+  }
+
+  .city-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+  }
+}
+
+/* =========================
+   RESPONSIVE - PETITS MOBILES
+   ========================= */
+@media (max-width: 480px) {
+  .home-screen {
+    padding: 16px 12px;
+  }
+
+  .welcome h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .welcome-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .cities-grid {
+    gap: 12px;
+  }
+
+  .city-card {
+    padding: 16px;
+  }
+
+  .city-card h3 {
+    font-size: 18px;
+  }
+
+  .city-card p {
+    font-size: 12px;
+  }
+
+  .city-btn {
+    padding: 10px 16px;
+    font-size: 13px;
   }
 }
