@@ -3,6 +3,8 @@
  * Contient : Historique, Fichier, Image de fond
  */
 
+import { icon, initIcons, actionIcons } from '../utils/icons.js';
+
 export class SettingsToolbar {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
@@ -24,10 +26,10 @@ export class SettingsToolbar {
       <div class="settings-toolbar-content">
         <!-- Historique -->
         <button class="settings-btn undo-btn" id="settings-undo-btn" title="Annuler (Ctrl+Z)">
-          ↶
+          ${icon(actionIcons.undo, 20, 'white')}
         </button>
         <button class="settings-btn redo-btn" id="settings-redo-btn" title="Refaire (Ctrl+Y)">
-          ↷
+          ${icon(actionIcons.redo, 20, 'white')}
         </button>
 
         <div class="settings-separator"></div>
@@ -35,10 +37,10 @@ export class SettingsToolbar {
         <!-- Image de fond -->
         <label class="settings-btn background-image-btn" title="Charger image de fond">
           <input type="file" accept="image/*" id="settings-background-input" style="display: none;" />
-          📷
+          ${icon(actionIcons.backgroundImage, 20, 'white')}
         </label>
         <button class="settings-btn background-toggle-btn" id="settings-background-toggle" style="display: none;" title="Toggle image">
-          👁️
+          ${icon(actionIcons.backgroundToggle, 20, 'white')}
         </button>
         <div id="settings-opacity-control" style="display: none; width: 48px; padding: 8px 0;">
           <input type="range" min="0" max="100" value="50" id="settings-background-opacity"
@@ -50,17 +52,20 @@ export class SettingsToolbar {
 
         <!-- Fichier -->
         <button class="settings-btn save-btn" id="settings-save-btn" title="Sauvegarder (Ctrl+S)">
-          💾
+          ${icon(actionIcons.save, 20, 'white')}
         </button>
         <button class="settings-btn export-btn" id="settings-export-btn" title="Exporter en JSON">
-          📥
+          ${icon(actionIcons.export, 20, 'white')}
         </button>
         <label class="settings-btn import-btn" title="Importer JSON">
           <input type="file" accept=".json" id="settings-import-input" style="display: none;" />
-          📤
+          ${icon(actionIcons.import, 20, 'white')}
         </label>
       </div>
     `;
+
+    // Initialise les icônes Lucide
+    initIcons();
   }
 
   /**

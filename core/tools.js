@@ -36,7 +36,7 @@ export class ToolSystem {
    * Définit la taille du pinceau
    */
   setBrushSize(size) {
-    this.brushSize = Math.max(1, Math.min(10, size));
+    this.brushSize = Math.max(1, Math.min(16, size));
   }
 
   /**
@@ -129,14 +129,18 @@ export class ToolSystem {
    * Applique le pinceau
    */
   applyBrush(x, y) {
+    // Calcul pour obtenir un carré parfait de taille brushSize×brushSize
+    // Pour brushSize=1: dessine 1 tuile à (x, y)
+    // Pour brushSize=2: dessine 2×2 tuiles centré sur (x, y)
+    // Pour brushSize=4: dessine 4×4 tuiles centré sur (x, y)
     const half = Math.floor(this.brushSize / 2);
+    const offset = this.brushSize % 2 === 0 ? 0 : 0; // Pas d'offset pour pairs/impairs
 
-    for (let dy = -half; dy <= half; dy++) {
-      for (let dx = -half; dx <= half; dx++) {
-        // Brosse circulaire
-        if (dx * dx + dy * dy <= half * half + half) {
-          this.mapGrid.setTile(x + dx, y + dy, this.currentTile, true);
-        }
+    for (let dy = 0; dy < this.brushSize; dy++) {
+      for (let dx = 0; dx < this.brushSize; dx++) {
+        const targetX = x - half + dx;
+        const targetY = y - half + dy;
+        this.mapGrid.setTile(targetX, targetY, this.currentTile, true);
       }
     }
 
@@ -151,13 +155,14 @@ export class ToolSystem {
    * Applique la gomme
    */
   applyErase(x, y) {
+    // Même logique que le pinceau : carré parfait
     const half = Math.floor(this.brushSize / 2);
 
-    for (let dy = -half; dy <= half; dy++) {
-      for (let dx = -half; dx <= half; dx++) {
-        if (dx * dx + dy * dy <= half * half + half) {
-          this.mapGrid.eraseTile(x + dx, y + dy);
-        }
+    for (let dy = 0; dy < this.brushSize; dy++) {
+      for (let dx = 0; dx < this.brushSize; dx++) {
+        const targetX = x - half + dx;
+        const targetY = y - half + dy;
+        this.mapGrid.eraseTile(targetX, targetY);
       }
     }
 

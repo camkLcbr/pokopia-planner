@@ -157,6 +157,14 @@ class PokopiaPlannerApp {
     this.toolSystem = new ToolSystem(this.mapGrid, this.renderer);
     this.toolSystem.setTile(defaultTerrain);
 
+    // Callback quand la pipette sélectionne une tuile
+    this.toolSystem.onTilePicked = (tileId) => {
+      const tile = this.tilesData[tileId];
+      if (tile && this.categoryToolbar) {
+        this.categoryToolbar.setCurrentTileColor(tile.color || tile.gradient || '#726a5a');
+      }
+    };
+
     // Initialise le système d'image de fond
     this.backgroundImage = new BackgroundImage(this.renderer);
 
@@ -208,6 +216,12 @@ class PokopiaPlannerApp {
           this.categoryToolbar.setOnBrushSizeChange((size) => {
             this.toolSystem.setBrushSize(size);
           });
+
+          // Initialise la couleur par défaut
+          const defaultTile = this.tilesData[defaultTerrain];
+          if (defaultTile) {
+            this.categoryToolbar.setCurrentTileColor(defaultTile.color || defaultTile.gradient || '#726a5a');
+          }
         }
       } else {
         // Element pas encore accessible, réessayer au prochain frame

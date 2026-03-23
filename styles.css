@@ -1,12 +1,31 @@
-/* Pokopia Planner - Styles globaux */
+/* Pokopia Planner - Styles globaux (Redesign inspiré Happy Island Designer) */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f3e5; /* Beige chaud Happy Island Designer */
   height: 100vh;
   overflow: hidden;
+  color: #726a5a; /* Texte neutre terre */
+}
+
+/* Icônes Lucide - Style global */
+i[data-lucide] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+i[data-lucide] svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* Interface principale */
@@ -22,7 +41,7 @@ body {
 .main {
   flex: 1;
   position: relative;
-  background: #f0f8ff;
+  background: #ecebd5; /* Fond légèrement plus foncé que le body */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,8 +51,8 @@ body {
 #mapCanvas {
   display: block;
   cursor: grab;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-radius: 8px;
 }
 
 #mapCanvas:active { cursor: grabbing; }
@@ -45,380 +64,461 @@ body {
 #mapCanvas.tool-rectangle { cursor: crosshair; }
 #mapCanvas.tool-eyedropper { cursor: pointer; }
 
-/* Category Toolbar - Système à deux niveaux */
+/* =========================
+   CATEGORY TOOLBAR (Left Side)
+   ========================= */
 .category-toolbar {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 16px;
+  left: 16px;
   z-index: 100;
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 12px;
   align-items: flex-start;
 }
 
 /* Toolbar principale (catégories) */
 .category-toolbar-main {
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
   padding: 8px;
-  border-radius: 0 12px 12px 0;
-  box-shadow: 2px 0 16px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  border: 2px solid #e8e6d8;
 }
 
 .category-btn {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   padding: 0;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 10px;
-  background: transparent;
+  background: #fafaf8;
   cursor: pointer;
-  font-size: 24px;
-  transition: all 0.2s ease;
+  font-size: 26px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .category-btn:hover {
-  background: rgba(76, 175, 80, 0.1);
-  transform: scale(1.05);
+  background: #f0efe5;
+  border-color: #d4d2c4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
 
 .category-btn.active {
-  background: rgba(76, 175, 80, 0.2);
-  box-shadow: inset 0 0 0 2px rgba(76, 175, 80, 0.5);
+  background: #35a043;
+  border-color: #2d8838;
+  box-shadow: 0 2px 8px rgba(53,160,67,0.3);
+  transform: scale(1.02);
+}
+
+.category-btn.active:hover {
+  transform: scale(1.02);
 }
 
 /* Toolbar secondaire (options) */
 .category-toolbar-secondary {
   position: fixed;
-  top: 10px;
-  left: 74px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 8px;
+  top: 16px;
+  left: 96px;
+  background: #ffffff;
+  padding: 10px;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-height: calc(100vh - 20px);
+  gap: 6px;
+  max-height: calc(100vh - 32px);
   overflow-y: auto;
-  max-width: 200px;
+  max-width: 220px;
+  border: 2px solid #e8e6d8;
 }
 
-/* Boutons de tuiles */
+/* =========================
+   BOUTONS DE TUILES
+   ========================= */
 .tile-btn {
   width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  transition: all 0.2s ease;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.tile-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .tile-btn:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.tile-btn:hover::before {
+  opacity: 1;
+}
+
+.tile-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .tile-name {
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
+  letter-spacing: 0.3px;
 }
 
-/* Boutons d'outils dans la secondary toolbar */
+/* =========================
+   BOUTONS D'OUTILS
+   ========================= */
 .tool-btn {
   width: 100%;
   min-height: 44px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
+  padding: 10px 12px;
+  border: 2px solid #e8e6d8;
+  border-radius: 10px;
+  background: #fafaf8;
   cursor: pointer;
   font-size: 18px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #666;
+  gap: 10px;
+  color: #726a5a;
 }
 
 .tool-btn:hover {
-  background: rgba(76, 175, 80, 0.1);
-  transform: translateX(4px);
+  background: #f0efe5;
+  border-color: #d4d2c4;
+  transform: translateX(3px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .tool-btn.active {
-  background: rgba(76, 175, 80, 0.15);
-  color: #4CAF50;
+  background: #35a043;
+  border-color: #2d8838;
+  color: white;
+  box-shadow: 0 2px 8px rgba(53,160,67,0.3);
+}
+
+.tool-btn.active .tool-label {
+  color: white;
+}
+
+/* Les icônes colorées restent colorées même quand le bouton est actif */
+.tool-btn.active i[data-lucide] svg {
+  color: inherit !important;
 }
 
 .tool-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #726a5a;
 }
 
-/* Sélecteur de taille de pinceau */
+/* =========================
+   SÉLECTEUR DE TAILLE
+   ========================= */
 .brush-size-separator {
-  height: 1px;
-  background: rgba(0, 0, 0, 0.1);
+  height: 2px;
+  background: #e8e6d8;
   margin: 8px 0;
+  border-radius: 1px;
 }
 
 .brush-size-label {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  color: #666;
-  padding: 4px 8px;
+  letter-spacing: 0.8px;
+  color: #9b9388;
+  padding: 6px 10px;
   text-align: center;
 }
 
-.brush-size-selector {
+.brush-size-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+.brush-size-btn-minus,
+.brush-size-btn-plus {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid #e8e6d8;
+  border-radius: 6px;
+  background: #fafaf8;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #726a5a;
+  flex-shrink: 0;
+}
+
+.brush-size-btn-minus:hover,
+.brush-size-btn-plus:hover {
+  background: #f0efe5;
+  border-color: #d4d2c4;
+  transform: scale(1.08);
+}
+
+.brush-size-btn-minus:active,
+.brush-size-btn-plus:active {
+  transform: scale(0.95);
+}
+
+.brush-size-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 2px solid #e8e6d8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #726a5a;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+.brush-size-input:focus {
+  outline: none;
+  border-color: #35a043;
+  box-shadow: 0 0 0 3px rgba(53,160,67,0.1);
+}
+
+.brush-size-input::-webkit-inner-spin-button,
+.brush-size-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.brush-size-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.brush-size-preview {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9b9388;
+  text-align: center;
+  padding: 4px 8px;
+  background: #f5f3e5;
+  border-radius: 6px;
+  margin: 4px 8px;
+}
+
+/* =========================
+   SETTINGS TOOLBAR (Right Side)
+   ========================= */
+.settings-toolbar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
+.settings-toolbar-content {
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  align-items: center;
+  border: 2px solid #e8e6d8;
 }
 
-.brush-size-btn {
+.settings-separator {
+  height: 2px;
   width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #f5f5f5;
+  background: #e8e6d8;
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
+.settings-btn {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid #e8e6d8;
+  border-radius: 10px;
+  background: #fafaf8;
   cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: #666;
-  transition: all 0.2s ease;
+  font-size: 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
 }
 
-.brush-size-btn:hover {
-  background: rgba(76, 175, 80, 0.1);
-  transform: translateX(4px);
+.settings-btn:hover {
+  background: #f0efe5;
+  border-color: #d4d2c4;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.brush-size-btn.active {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
-  font-weight: 700;
+.settings-btn:active {
+  transform: scale(0.98);
 }
 
-/* Bouton d'image de fond */
-.background-image-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #2196F3;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.background-image-btn:hover {
-  background: #1976D2;
-  transform: translateX(4px);
-}
-
-/* Bouton toggle d'image de fond */
-.background-toggle-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #4CAF50;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.background-toggle-btn:hover {
-  background: #45a049;
-  transform: translateX(4px);
-}
-
-/* Bouton de sauvegarde */
-.save-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #FF9800;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.save-btn:hover {
-  background: #F57C00;
-  transform: translateX(4px);
-}
-
-/* Bouton d'export */
-.export-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #9C27B0;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.export-btn:hover {
-  background: #7B1FA2;
-  transform: translateX(4px);
-}
-
-/* Bouton d'import */
-.import-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #00BCD4;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.import-btn:hover {
-  background: #0097A7;
-  transform: translateX(4px);
-}
-
-/* Bouton Undo */
+/* Boutons colorés spécifiques */
 .undo-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #607D8B;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
+  background: linear-gradient(135deg, #78909C 0%, #607D8B 100%);
+  border-color: #546E7A;
   color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
 }
 
 .undo-btn:hover {
-  background: #546E7A;
-  transform: translateX(4px);
+  background: linear-gradient(135deg, #607D8B 0%, #546E7A 100%);
 }
 
-/* Bouton Redo */
 .redo-btn {
-  width: 100%;
-  min-height: 36px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: #78909C;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
+  background: linear-gradient(135deg, #90A4AE 0%, #78909C 100%);
+  border-color: #6A7C89;
   color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
 }
 
 .redo-btn:hover {
-  background: #6A7C89;
-  transform: translateX(4px);
+  background: linear-gradient(135deg, #78909C 0%, #6A7C89 100%);
 }
 
-/* Scrollbar pour secondary toolbar */
+.background-image-btn {
+  background: linear-gradient(135deg, #42A5F5 0%, #2196F3 100%);
+  border-color: #1976D2;
+  color: white;
+}
+
+.background-image-btn:hover {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.background-toggle-btn {
+  background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+  border-color: #45a049;
+  color: white;
+}
+
+.background-toggle-btn:hover {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+  border-color: #F57C00;
+  color: white;
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.export-btn {
+  background: linear-gradient(135deg, #AB47BC 0%, #9C27B0 100%);
+  border-color: #7B1FA2;
+  color: white;
+}
+
+.export-btn:hover {
+  background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+}
+
+.import-btn {
+  background: linear-gradient(135deg, #26C6DA 0%, #00BCD4 100%);
+  border-color: #0097A7;
+  color: white;
+}
+
+.import-btn:hover {
+  background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+}
+
+/* Contrôle d'opacité */
+#settings-opacity-control {
+  padding: 8px 0;
+  width: 52px;
+}
+
+#settings-background-opacity {
+  width: 100%;
+  height: 80px;
+  -webkit-appearance: slider-vertical;
+}
+
+/* =========================
+   SCROLLBAR (Secondary Toolbar)
+   ========================= */
 .category-toolbar-secondary::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .category-toolbar-secondary::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f5f3e5;
+  border-radius: 4px;
 }
 
 .category-toolbar-secondary::-webkit-scrollbar-thumb {
-  background: rgba(76, 175, 80, 0.3);
-  border-radius: 3px;
+  background: #d4d2c4;
+  border-radius: 4px;
 }
 
 .category-toolbar-secondary::-webkit-scrollbar-thumb:hover {
-  background: rgba(76, 175, 80, 0.5);
+  background: #bbb9ab;
 }
-
 
 /* =========================
    ÉCRAN D'ACCUEIL
    ========================= */
 .welcome {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-  color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(245,243,229,0.98) 0%, rgba(236,235,213,0.98) 100%);
+  color: #726a5a;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -434,174 +534,170 @@ body {
 .welcome h1 {
   font-size: 48px;
   margin-bottom: 16px;
-  text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  color: #35a043;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .welcome-subtitle {
   font-size: 18px;
   margin-bottom: 40px;
-  opacity: 0.9;
+  opacity: 0.8;
+  font-weight: 500;
 }
 
 .cities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 .city-card {
-  background: white;
-  color: #333;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  background: #ffffff;
+  color: #726a5a;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  border: 2px solid #e8e6d8;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
 }
 
 .city-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-color: #35a043;
 }
 
 .city-card h3 {
-  font-size: 22px;
-  margin-bottom: 8px;
-  color: #4CAF50;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #35a043;
+  font-weight: 700;
 }
 
 .city-card p {
   font-size: 14px;
-  color: #666;
-  margin-bottom: 16px;
+  color: #9b9388;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .city-card-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
 }
 
 .city-btn {
-  padding: 10px 20px;
-  background: #4CAF50;
+  padding: 12px 24px;
+  background: #35a043;
   color: white;
-  border: none;
-  border-radius: 8px;
+  border: 2px solid #2d8838;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(53,160,67,0.2);
 }
 
 .city-btn:hover {
-  background: #45a049;
+  background: #2d8838;
   transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(53,160,67,0.3);
+}
+
+.city-btn:active {
+  transform: scale(0.98);
 }
 
 .city-btn.secondary {
-  background: #2196F3;
+  background: #42A5F5;
+  border-color: #2196F3;
+  box-shadow: 0 2px 6px rgba(33,150,243,0.2);
 }
 
 .city-btn.secondary:hover {
-  background: #1976D2;
+  background: #2196F3;
+  box-shadow: 0 4px 12px rgba(33,150,243,0.3);
 }
 
-/* Indicateur de sauvegarde */
+/* =========================
+   INDICATEURS
+   ========================= */
 .save-indicator {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  padding: 8px 16px;
-  background: rgba(76, 175, 80, 0.9);
+  bottom: 24px;
+  right: 24px;
+  padding: 10px 18px;
+  background: #35a043;
   color: white;
-  border-radius: 20px;
+  border-radius: 24px;
   font-size: 13px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(53,160,67,0.3);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  border: 2px solid #2d8838;
 }
 
 .save-indicator.show {
   opacity: 1;
 }
 
-/* Zoom indicator */
 .zoom-indicator {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(255,255,255,0.9);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  color: #333;
+  bottom: 24px;
+  left: 24px;
+  background: #ffffff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #726a5a;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 2px solid #e8e6d8;
 }
 
 /* =========================
-   SETTINGS TOOLBAR (top-right)
+   RESPONSIVE
    ========================= */
-.settings-toolbar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 100;
-}
-
-.settings-toolbar-content {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 8px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: center;
-}
-
-.settings-separator {
-  height: 1px;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.1);
-  margin: 4px 0;
-}
-
-.settings-btn {
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 24px;
-  color: white;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.settings-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* Responsive (optionnel pour desktop uniquement) */
 @media (max-width: 1024px) {
   .category-toolbar {
-    top: 10px;
-    left: 10px;
+    top: 12px;
+    left: 12px;
   }
 
   .settings-toolbar {
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .category-toolbar-secondary {
+    left: 96px;
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-btn,
+  .settings-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .welcome h1 {
+    font-size: 36px;
+  }
+
+  .cities-grid {
+    grid-template-columns: 1fr;
   }
 }

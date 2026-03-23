@@ -542,25 +542,22 @@ export class CanvasRenderer {
     this.ctx.strokeStyle = 'rgba(76, 175, 80, 0.8)'; // Bordure verte
     this.ctx.lineWidth = Math.max(1, this.zoom * 2);
 
-    // Parcourt les tuiles du brush (pattern circulaire)
-    for (let dy = -half; dy <= half; dy++) {
-      for (let dx = -half; dx <= half; dx++) {
-        const tx = worldX + dx;
-        const ty = worldY + dy;
+    // Parcourt les tuiles du brush (pattern carré)
+    for (let dy = 0; dy < size; dy++) {
+      for (let dx = 0; dx < size; dx++) {
+        const tx = worldX - half + dx;
+        const ty = worldY - half + dy;
 
-        // Pattern circulaire (même logique que ToolSystem)
-        if (dx * dx + dy * dy <= half * half + half) {
-          // Vérifie que la tuile est dans les limites
-          if (tx >= 0 && tx < 384 && ty >= 0 && ty < 384) {
-            const screen = this.worldToScreen(tx, ty);
-            const tileSize = this.tileSize * this.zoom;
+        // Vérifie que la tuile est dans les limites
+        if (tx >= 0 && tx < 384 && ty >= 0 && ty < 384) {
+          const screen = this.worldToScreen(tx, ty);
+          const tileSize = this.tileSize * this.zoom;
 
-            // Remplit la tuile
-            this.ctx.fillRect(screen.x, screen.y, tileSize, tileSize);
+          // Remplit la tuile
+          this.ctx.fillRect(screen.x, screen.y, tileSize, tileSize);
 
-            // Bordure
-            this.ctx.strokeRect(screen.x, screen.y, tileSize, tileSize);
-          }
+          // Bordure
+          this.ctx.strokeRect(screen.x, screen.y, tileSize, tileSize);
         }
       }
     }

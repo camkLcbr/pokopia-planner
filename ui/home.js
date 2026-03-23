@@ -2,6 +2,8 @@
  * HomeScreen - Écran d'accueil avec sélection des 5 villes
  */
 
+import { icon, initIcons } from '../utils/icons.js';
+
 export class HomeScreen {
   constructor(containerId, citiesData, onCitySelect) {
     this.container = document.getElementById(containerId);
@@ -19,15 +21,18 @@ export class HomeScreen {
     const cities = Object.values(this.citiesData);
 
     this.container.innerHTML = `
-      <h1>🏗️ Pokopia City Planner</h1>
+      <h1>${icon('building-2', 32)} Pokopia City Planner</h1>
       <p class="welcome-subtitle">
-        Planifie ta ville Pokémon (384×384 blocs)
+        Planifie ta ville Pokémon
       </p>
 
       <div class="cities-grid">
         ${cities.map(city => this.renderCityCard(city)).join('')}
       </div>
     `;
+
+    // Initialise les icônes Lucide
+    initIcons();
   }
 
   /**
@@ -44,18 +49,18 @@ export class HomeScreen {
         <div class="city-card-actions">
           ${hasSave
             ? `<button class="city-btn" data-action="load" data-city="${city.id}">
-                 📂 Charger
+                 ${icon('folder-open', 16)} Charger
                </button>`
             : ''
           }
           <button class="city-btn ${!hasSave ? '' : 'secondary'}" data-action="new" data-city="${city.id}">
-            ✨ ${hasSave ? 'Nouveau' : 'Commencer'}
+            ${icon('sparkles', 16)} ${hasSave ? 'Nouveau' : 'Commencer'}
           </button>
         </div>
 
         ${hasSave
           ? `<div style="margin-top: 12px; font-size: 12px; color: #999;">
-               💾 Dernière sauvegarde : ${this.getLastSaveDate(city.id)}
+               ${icon('save', 14)} Dernière sauvegarde : ${this.getLastSaveDate(city.id)}
              </div>`
           : ''
         }

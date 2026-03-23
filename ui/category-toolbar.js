@@ -2,6 +2,8 @@
  * CategoryToolbar - Toolbar à deux niveaux avec catégories et sous-outils
  */
 
+import { icon, initIcons, categoryIcons, toolIcons } from '../utils/icons.js';
+
 export class CategoryToolbar {
   constructor(containerId, tilesData, onTileSelect) {
     this.container = document.getElementById(containerId);
@@ -20,44 +22,46 @@ export class CategoryToolbar {
     // Définition des catégories avec leurs icônes
     this.categories = {
       terrain: {
-        icon: '🟩',
+        icon: categoryIcons.terrain,
         name: 'Terrains',
         filter: (tile) => tile.category === 'terrain'
       },
       buildings: {
-        icon: '🏠',
+        icon: categoryIcons.buildings,
         name: 'Bâtiments',
         filter: (tile) => tile.category === 'buildings'
       },
       decor: {
-        icon: '🌳',
+        icon: categoryIcons.decor,
         name: 'Décors',
         filter: (tile) => tile.category === 'decor'
       },
       habitat: {
-        icon: '🐾',
+        icon: categoryIcons.habitat,
         name: 'Habitats',
         filter: (tile) => tile.category === 'habitat'
       },
       tools: {
-        icon: '🛠️',
+        icon: categoryIcons.tools,
         name: 'Outils',
         special: true
       }
     };
 
     this.tools = {
-      brush: { icon: '🖌️', name: 'Brosse' },
-      erase: { icon: '🧹', name: 'Gomme' },
-      fill: { icon: '🪣', name: 'Remplir' },
-      rectangle: { icon: '▭', name: 'Rectangle' },
-      eyedropper: { icon: '💧', name: 'Pipette' }
+      brush: { icon: toolIcons.brush, name: 'Brosse' },
+      erase: { icon: toolIcons.erase, name: 'Gomme' },
+      fill: { icon: toolIcons.fill, name: 'Remplir' },
+      rectangle: { icon: toolIcons.rectangle, name: 'Rectangle' },
+      eyedropper: { icon: toolIcons.eyedropper, name: 'Pipette' }
     };
 
-    // Tailles de pinceau disponibles
-    this.brushSizes = [1, 2, 4, 8];
+    // Taille de pinceau
     this.currentBrushSize = 1;
     this.onBrushSizeChange = null;
+
+    // Couleur de la tuile active (pour colorer les icônes)
+    this.currentTileColor = '#726a5a'; // Couleur par défaut (gris terre)
 
     this.render();
     this.setupEventListeners();
@@ -75,7 +79,7 @@ export class CategoryToolbar {
             data-category="${key}"
             title="${cat.name}"
           >
-            ${cat.icon}
+            ${icon(cat.icon, 24)}
           </button>
         `).join('')}
       </div>
@@ -87,6 +91,9 @@ export class CategoryToolbar {
     secondaryToolbar.id = 'secondary-toolbar';
     secondaryToolbar.style.display = 'none';
     this.container.appendChild(secondaryToolbar);
+
+    // Initialise les icônes Lucide
+    initIcons();
   }
 
   /**
@@ -185,36 +192,94 @@ export class CategoryToolbar {
   renderToolsSecondary() {
     const secondaryToolbar = document.getElementById('secondary-toolbar');
 
-    // Boutons d'outils
-    const toolsHTML = Object.entries(this.tools).map(([key, tool]) => `
-      <button
-        class="tool-btn ${this.currentTool === key ? 'active' : ''}"
-        data-tool="${key}"
-        title="${tool.name}"
-      >
-        ${tool.icon}
-        <span class="tool-label">${tool.name}</span>
-      </button>
-    `).join('');
+    // Boutons d'outils avec couleur dynamique pour brush, fill et rectangle
+    const toolsHTML = Object.entries(this.tools).map(([key, tool]) => {
+      // Outils qui doivent être colorés avec la couleur de la tuile active
+      const coloredTools = ['brush', 'fill', 'rectangle'];
+      const iconColor = coloredTools.includes(key) ? this.currentTileColor : 'currentColor';
+
+      return `
+        <button
+          class="tool-btn ${this.currentTool === key ? 'active' : ''}"
+          data-tool="${key}"
+          title="${tool.name}"
+        >
+          ${icon(tool.icon, 18, iconColor)}
+          <span class="tool-label">${tool.name}</span>
+        </button>
+      `;
+    }).join('');
 
     // Séparateur + Sélecteur de taille de pinceau
     const brushSizeHTML = `
       <div class="brush-size-separator"></div>
-      <div class="brush-size-label">Taille</div>
-      <div class="brush-size-selector">
-        ${this.brushSizes.map(size => `
-          <button
-            class="brush-size-btn ${this.currentBrushSize === size ? 'active' : ''}"
-            data-size="${size}"
-            title="${size}×${size}"
-          >
-            ${size}×${size}
-          </button>
-        `).join('')}
+      <div class="brush-size-label">Taille du pinceau</div>
+      <div class="brush-size-control">
+        <button class="brush-size-btn-minus" id="brush-size-minus" title="Diminuer (Min: 1)">
+          ${icon('minus', 16)}
+        </button>
+        <input
+          type="number"
+          id="brush-size-input"
+          class="brush-size-input"
+          value="${this.currentBrushSize}"
+          min="1"
+          max="16"
+          title="Taille du pinceau (1-16)"
+        />
+        <button class="brush-size-btn-plus" id="brush-size-plus" title="Augmenter (Max: 16)">
+          ${icon('plus', 16)}
+        </button>
       </div>
+      <div class="brush-size-preview">${this.currentBrushSize}×${this.currentBrushSize}</div>
     `;
 
     secondaryToolbar.innerHTML = toolsHTML + brushSizeHTML;
+
+    // Initialise les icônes Lucide
+    initIcons();
+
+    // Setup des événements pour les contrôles de taille
+    this.setupBrushSizeControls();
+  }
+
+  /**
+   * Configure les événements pour les contrôles de taille de pinceau
+   */
+  setupBrushSizeControls() {
+    const minusBtn = document.getElementById('brush-size-minus');
+    const plusBtn = document.getElementById('brush-size-plus');
+    const input = document.getElementById('brush-size-input');
+
+    if (minusBtn) {
+      minusBtn.addEventListener('click', () => {
+        const newSize = Math.max(1, this.currentBrushSize - 1);
+        this.setBrushSize(newSize);
+      });
+    }
+
+    if (plusBtn) {
+      plusBtn.addEventListener('click', () => {
+        const newSize = Math.min(16, this.currentBrushSize + 1);
+        this.setBrushSize(newSize);
+      });
+    }
+
+    if (input) {
+      input.addEventListener('input', (e) => {
+        let value = parseInt(e.target.value);
+        if (isNaN(value)) value = 1;
+        value = Math.max(1, Math.min(16, value));
+        this.setBrushSize(value);
+      });
+
+      input.addEventListener('blur', (e) => {
+        // Force la valeur correcte si l'input est vide
+        if (!e.target.value) {
+          e.target.value = this.currentBrushSize;
+        }
+      });
+    }
   }
 
   /**
@@ -237,6 +302,11 @@ export class CategoryToolbar {
     const tile = this.tilesData[tileId];
     if (tile && this.onTileSelect) {
       this.onTileSelect(tileId, tile);
+    }
+
+    // Met à jour la couleur de la tuile active
+    if (tile) {
+      this.setCurrentTileColor(tile.color || tile.gradient || '#726a5a');
     }
 
     // Active automatiquement l'outil brush quand on sélectionne une tuile
@@ -271,16 +341,23 @@ export class CategoryToolbar {
    * Définit la taille du pinceau
    */
   setBrushSize(size) {
-    this.currentBrushSize = size;
+    this.currentBrushSize = Math.max(1, Math.min(16, size));
 
-    // Met à jour l'affichage si la toolbar outils est ouverte
-    if (this.currentCategory === 'tools') {
-      this.renderToolsSecondary();
+    // Met à jour l'input et le preview
+    const input = document.getElementById('brush-size-input');
+    const preview = document.querySelector('.brush-size-preview');
+
+    if (input) {
+      input.value = this.currentBrushSize;
+    }
+
+    if (preview) {
+      preview.textContent = `${this.currentBrushSize}×${this.currentBrushSize}`;
     }
 
     // Callback externe (vers ToolSystem)
     if (this.onBrushSizeChange) {
-      this.onBrushSizeChange(size);
+      this.onBrushSizeChange(this.currentBrushSize);
     }
   }
 
@@ -289,6 +366,18 @@ export class CategoryToolbar {
    */
   setOnBrushSizeChange(callback) {
     this.onBrushSizeChange = callback;
+  }
+
+  /**
+   * Définit la couleur de la tuile active
+   */
+  setCurrentTileColor(color) {
+    this.currentTileColor = color;
+
+    // Met à jour l'affichage des outils si la toolbar outils est ouverte
+    if (this.currentCategory === 'tools') {
+      this.renderToolsSecondary();
+    }
   }
 
   /**
