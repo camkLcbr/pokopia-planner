@@ -1,0 +1,130 @@
+{
+  "dark-blue": {
+    "id": "dark-blue",
+    "name": "Dark blue",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#003366",
+    "sprite": null
+  },
+  "water-blue": {
+    "id": "water-blue",
+    "name": "Water blue",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#2196F3",
+    "sprite": null
+  },
+  "water-dark-blue": {
+    "id": "water-dark-blue",
+    "name": "Water Dark Blue",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#003366",
+    "sprite": null
+  },
+  "field-grass": {
+    "id": "field-grass",
+    "name": "Field grass",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#7CB342",
+    "sprite": null
+  },
+  "sand": {
+    "id": "sand",
+    "name": "Sand",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#F4A460",
+    "sprite": null
+  },
+  "grey-rock": {
+    "id": "grey-rock",
+    "name": "Grey Rock",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#9E9E9E",
+    "sprite": null
+  },
+  "seashore-grass": {
+    "id": "seashore-grass",
+    "name": "Seashore grass",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#8BC34A",
+    "sprite": null
+  },
+  "dry-alpine-grass": {
+    "id": "dry-alpine-grass",
+    "name": "Dry Alpine grass",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#C5E1A5",
+    "sprite": null
+  },
+  "dark-rock": {
+    "id": "dark-rock",
+    "name": "Dark rock",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#424242",
+    "sprite": null
+  },
+  "path": {
+    "id": "path",
+    "name": "Path",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#D2B48C",
+    "sprite": null
+  },
+  "hay": {
+    "id": "hay",
+    "name": "Hay",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#FFE082",
+    "sprite": null
+  },
+  "dirt": {
+    "id": "dirt",
+    "name": "Dirt",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#8B4513",
+    "sprite": null
+  },
+  "yellow-rock": {
+    "id": "yellow-rock",
+    "name": "Yellow Rock",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#FFD54F",
+    "sprite": null
+  },
+  "brown-rock": {
+    "id": "brown-rock",
+    "name": "Brown Rock",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#795548",
+    "sprite": null
+  },
+  "sky-high-grass": {
+    "id": "sky-high-grass",
+    "name": "Sky-High grass",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#AED581",
+    "sprite": null
+  },
+  "green-grass": {
+    "id": "green-grass",
+    "name": "Green Grass",
+    "category": "terrain",
+    "size": [1, 1],
+    "color": "#4CAF50",
+    "sprite": null
+  }
+}

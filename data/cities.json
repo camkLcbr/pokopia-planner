@@ -1,0 +1,52 @@
+{
+  "palette-town": {
+    "id": "palette-town",
+    "name": "Palette Town",
+    "name_fr": "Bourg Palette",
+    "width": 384,
+    "height": 384,
+    "defaultTerrain": "field-grass",
+    "backgroundColor": "#90EE90",
+    "description": "Petite ville paisible, lieu de départ de nombreux dresseurs"
+  },
+  "withered-wasteland": {
+    "id": "withered-wasteland",
+    "name": "Withered Wasteland",
+    "name_fr": "Terres Maudites",
+    "width": 240,
+    "height": 240,
+    "defaultTerrain": "field-grass",
+    "backgroundColor": "#7CB342",
+    "description": "Ville forestière avec une arène Pokémon redoutable"
+  },
+  "rocky-ridges": {
+    "id": "rocky-ridges",
+    "name": "Rocky Ridges",
+    "name_fr": "Collines Rocheuses",
+    "width": 272,
+    "height": 272,
+    "defaultTerrain": "grey-rock",
+    "backgroundColor": "#B0BEC5",
+    "description": "Ville rocheuse, célèbre pour son musée"
+  },
+  "bleak-beach": {
+    "id": "bleak-beach",
+    "name": "Bleak Beach",
+    "name_fr": "Plage Maudite",
+    "width": 272,
+    "height": 272,
+    "defaultTerrain": "field-grass",
+    "backgroundColor": "#64B5F6",
+    "description": "Ville au bord de l'eau, connue pour sa piscine"
+  },
+  "sparkling-skylands": {
+    "id": "sparkling-skylands",
+    "name": "Sparkling Skylands",
+    "name_fr": "Terres Célestes Étincelantes",
+    "width": 353,
+    "height": 353,
+    "defaultTerrain": "sand",
+    "backgroundColor": "#FFB74D",
+    "description": "Port maritime animé avec le S.S. Anne"
+  }
+}

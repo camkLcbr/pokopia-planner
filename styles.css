@@ -1,0 +1,607 @@
+/* Pokopia Planner - Styles globaux */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Interface principale */
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* =========================
+   ZONE CENTRALE (plein écran)
+   ========================= */
+.main {
+  flex: 1;
+  position: relative;
+  background: #f0f8ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#mapCanvas {
+  display: block;
+  cursor: grab;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+#mapCanvas:active { cursor: grabbing; }
+
+/* Curseurs pour les différents outils */
+#mapCanvas.tool-brush { cursor: crosshair; }
+#mapCanvas.tool-erase { cursor: cell; }
+#mapCanvas.tool-fill { cursor: copy; }
+#mapCanvas.tool-rectangle { cursor: crosshair; }
+#mapCanvas.tool-eyedropper { cursor: pointer; }
+
+/* Category Toolbar - Système à deux niveaux */
+.category-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Toolbar principale (catégories) */
+.category-toolbar-main {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-btn:hover {
+  background: rgba(76, 175, 80, 0.1);
+  transform: scale(1.05);
+}
+
+.category-btn.active {
+  background: rgba(76, 175, 80, 0.2);
+  box-shadow: inset 0 0 0 2px rgba(76, 175, 80, 0.5);
+}
+
+/* Toolbar secondaire (options) */
+.category-toolbar-secondary {
+  position: fixed;
+  top: 10px;
+  left: 74px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  max-width: 200px;
+}
+
+/* Boutons de tuiles */
+.tile-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tile-btn:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.tile-name {
+  font-size: 11px;
+  text-align: center;
+}
+
+/* Boutons d'outils dans la secondary toolbar */
+.tool-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+}
+
+.tool-btn:hover {
+  background: rgba(76, 175, 80, 0.1);
+  transform: translateX(4px);
+}
+
+.tool-btn.active {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.tool-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sélecteur de taille de pinceau */
+.brush-size-separator {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+.brush-size-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #666;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+.brush-size-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brush-size-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brush-size-btn:hover {
+  background: rgba(76, 175, 80, 0.1);
+  transform: translateX(4px);
+}
+
+.brush-size-btn.active {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+/* Bouton d'image de fond */
+.background-image-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2196F3;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.background-image-btn:hover {
+  background: #1976D2;
+  transform: translateX(4px);
+}
+
+/* Bouton toggle d'image de fond */
+.background-toggle-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #4CAF50;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.background-toggle-btn:hover {
+  background: #45a049;
+  transform: translateX(4px);
+}
+
+/* Bouton de sauvegarde */
+.save-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #FF9800;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.save-btn:hover {
+  background: #F57C00;
+  transform: translateX(4px);
+}
+
+/* Bouton d'export */
+.export-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #9C27B0;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.export-btn:hover {
+  background: #7B1FA2;
+  transform: translateX(4px);
+}
+
+/* Bouton d'import */
+.import-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #00BCD4;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.import-btn:hover {
+  background: #0097A7;
+  transform: translateX(4px);
+}
+
+/* Bouton Undo */
+.undo-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #607D8B;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.undo-btn:hover {
+  background: #546E7A;
+  transform: translateX(4px);
+}
+
+/* Bouton Redo */
+.redo-btn {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #78909C;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.redo-btn:hover {
+  background: #6A7C89;
+  transform: translateX(4px);
+}
+
+/* Scrollbar pour secondary toolbar */
+.category-toolbar-secondary::-webkit-scrollbar {
+  width: 6px;
+}
+
+.category-toolbar-secondary::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.category-toolbar-secondary::-webkit-scrollbar-thumb {
+  background: rgba(76, 175, 80, 0.3);
+  border-radius: 3px;
+}
+
+.category-toolbar-secondary::-webkit-scrollbar-thumb:hover {
+  background: rgba(76, 175, 80, 0.5);
+}
+
+
+/* =========================
+   ÉCRAN D'ACCUEIL
+   ========================= */
+.welcome {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 40px;
+}
+
+.welcome.hidden {
+  display: none;
+}
+
+.welcome h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.welcome-subtitle {
+  font-size: 18px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.city-card {
+  background: white;
+  color: #333;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.city-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+.city-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+  color: #4CAF50;
+}
+
+.city-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.city-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.city-btn {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.city-btn:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+.city-btn.secondary {
+  background: #2196F3;
+}
+
+.city-btn.secondary:hover {
+  background: #1976D2;
+}
+
+/* Indicateur de sauvegarde */
+.save-indicator {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  border-radius: 20px;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+/* Zoom indicator */
+.zoom-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.9);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   SETTINGS TOOLBAR (top-right)
+   ========================= */
+.settings-toolbar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+}
+
+.settings-toolbar-content {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.settings-separator {
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 4px 0;
+}
+
+.settings-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive (optionnel pour desktop uniquement) */
+@media (max-width: 1024px) {
+  .category-toolbar {
+    top: 10px;
+    left: 10px;
+  }
+
+  .settings-toolbar {
+    top: 10px;
+    right: 10px;
+  }
+}

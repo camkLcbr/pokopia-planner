@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokopia City Planner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Écran d'accueil (masqué par défaut après sélection) -->
+  <div class="welcome" id="welcome">
+    <!-- Contenu généré par HomeScreen -->
+  </div>
+
+  <!-- Éditeur principal (masqué au départ) -->
+  <div class="container" id="editor" style="display: none;">
+
+    <!-- Zone centrale -->
+    <div class="main">
+      <!-- Category Toolbar (nouveau système à deux niveaux) -->
+      <div class="category-toolbar" id="category-toolbar">
+        <!-- Contenu généré par CategoryToolbar -->
+      </div>
+
+      <!-- Settings Toolbar (top-right) -->
+      <div class="settings-toolbar" id="settings-toolbar">
+        <!-- Contenu généré par SettingsToolbar -->
+      </div>
+
+      <!-- Canvas de la carte -->
+      <canvas id="mapCanvas"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Import du script principal (ES modules) -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>

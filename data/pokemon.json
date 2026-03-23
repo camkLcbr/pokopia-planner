@@ -1,0 +1,275 @@
+{
+  "pidgey": {
+    "id": "pidgey",
+    "name": "Roucool",
+    "number": 16,
+    "types": ["normal", "flying"],
+    "preferredHabitats": ["grass", "tree"],
+    "baseChance": 0.25,
+    "requirements": {
+      "minTiles": { "tree": 3 }
+    }
+  },
+  "rattata": {
+    "id": "rattata",
+    "name": "Rattata",
+    "number": 19,
+    "types": ["normal"],
+    "preferredHabitats": ["grass", "path"],
+    "baseChance": 0.3,
+    "requirements": {}
+  },
+  "pikachu": {
+    "id": "pikachu",
+    "name": "Pikachu",
+    "number": 25,
+    "types": ["electric"],
+    "preferredHabitats": ["electric-pole"],
+    "baseChance": 0.15,
+    "requirements": {
+      "minTiles": { "electric-pole": 1 }
+    }
+  },
+  "nidoran-f": {
+    "id": "nidoran-f",
+    "name": "Nidoran♀",
+    "number": 29,
+    "types": ["poison"],
+    "preferredHabitats": ["grass", "flowers"],
+    "baseChance": 0.2,
+    "requirements": {
+      "minTiles": { "flowers": 5 }
+    }
+  },
+  "nidoran-m": {
+    "id": "nidoran-m",
+    "name": "Nidoran♂",
+    "number": 32,
+    "types": ["poison"],
+    "preferredHabitats": ["grass", "flowers"],
+    "baseChance": 0.2,
+    "requirements": {
+      "minTiles": { "flowers": 5 }
+    }
+  },
+  "jigglypuff": {
+    "id": "jigglypuff",
+    "name": "Rondoudou",
+    "number": 39,
+    "types": ["normal", "fairy"],
+    "preferredHabitats": ["flowers-large"],
+    "baseChance": 0.12,
+    "requirements": {
+      "minTiles": { "flowers-large": 2 }
+    }
+  },
+  "zubat": {
+    "id": "zubat",
+    "name": "Nosferapti",
+    "number": 41,
+    "types": ["poison", "flying"],
+    "preferredHabitats": ["cave-entrance"],
+    "baseChance": 0.4,
+    "requirements": {
+      "minTiles": { "cave-entrance": 1 }
+    }
+  },
+  "oddish": {
+    "id": "oddish",
+    "name": "Mystherbe",
+    "number": 43,
+    "types": ["grass", "poison"],
+    "preferredHabitats": ["flowers", "bush"],
+    "baseChance": 0.25,
+    "requirements": {
+      "minTiles": { "flowers": 3, "bush": 2 }
+    }
+  },
+  "paras": {
+    "id": "paras",
+    "name": "Paras",
+    "number": 46,
+    "types": ["bug", "grass"],
+    "preferredHabitats": ["mushroom"],
+    "baseChance": 0.35,
+    "requirements": {
+      "minTiles": { "mushroom": 2 }
+    }
+  },
+  "venonat": {
+    "id": "venonat",
+    "name": "Mimitoss",
+    "number": 48,
+    "types": ["bug", "poison"],
+    "preferredHabitats": ["tree", "bush"],
+    "baseChance": 0.22,
+    "requirements": {
+      "minTiles": { "tree": 4 }
+    }
+  },
+  "diglett": {
+    "id": "diglett",
+    "name": "Taupiqueur",
+    "number": 50,
+    "types": ["ground"],
+    "preferredHabitats": ["dirt", "sand"],
+    "baseChance": 0.28,
+    "requirements": {
+      "minTiles": { "dirt": 10 }
+    }
+  },
+  "meowth": {
+    "id": "meowth",
+    "name": "Miaouss",
+    "number": 52,
+    "types": ["normal"],
+    "preferredHabitats": ["house-small", "house-medium"],
+    "baseChance": 0.18,
+    "requirements": {
+      "minTiles": { "house-small": 2 }
+    }
+  },
+  "psyduck": {
+    "id": "psyduck",
+    "name": "Psykokwak",
+    "number": 54,
+    "types": ["water"],
+    "preferredHabitats": ["water", "pond"],
+    "baseChance": 0.3,
+    "requirements": {
+      "minTiles": { "water": 20 }
+    }
+  },
+  "mankey": {
+    "id": "mankey",
+    "name": "Férosinge",
+    "number": 56,
+    "types": ["fighting"],
+    "preferredHabitats": ["tree-large", "boulder"],
+    "baseChance": 0.2,
+    "requirements": {
+      "minTiles": { "tree-large": 3 }
+    }
+  },
+  "growlithe": {
+    "id": "growlithe",
+    "name": "Caninos",
+    "number": 58,
+    "types": ["fire"],
+    "preferredHabitats": ["house-medium", "house-small"],
+    "baseChance": 0.15,
+    "requirements": {
+      "minTiles": { "house-medium": 1 }
+    }
+  },
+  "poliwag": {
+    "id": "poliwag",
+    "name": "Ptitard",
+    "number": 60,
+    "types": ["water"],
+    "preferredHabitats": ["pond", "water"],
+    "baseChance": 0.35,
+    "requirements": {
+      "minTiles": { "pond": 1 }
+    }
+  },
+  "bellsprout": {
+    "id": "bellsprout",
+    "name": "Chétiflor",
+    "number": 69,
+    "types": ["grass", "poison"],
+    "preferredHabitats": ["flowers", "grass"],
+    "baseChance": 0.25,
+    "requirements": {
+      "minTiles": { "flowers": 5 }
+    }
+  },
+  "geodude": {
+    "id": "geodude",
+    "name": "Racaillou",
+    "number": 74,
+    "types": ["rock", "ground"],
+    "preferredHabitats": ["boulder", "rock", "cave-entrance"],
+    "baseChance": 0.35,
+    "requirements": {
+      "minTiles": { "boulder": 3 }
+    }
+  },
+  "magnemite": {
+    "id": "magnemite",
+    "name": "Magnéti",
+    "number": 81,
+    "types": ["electric", "steel"],
+    "preferredHabitats": ["electric-pole"],
+    "baseChance": 0.25,
+    "requirements": {
+      "minTiles": { "electric-pole": 2 }
+    }
+  },
+  "grimer": {
+    "id": "grimer",
+    "name": "Tadmorv",
+    "number": 88,
+    "types": ["poison"],
+    "preferredHabitats": ["trash-bin"],
+    "baseChance": 0.4,
+    "requirements": {
+      "minTiles": { "trash-bin": 1 }
+    }
+  },
+  "voltorb": {
+    "id": "voltorb",
+    "name": "Voltorbe",
+    "number": 100,
+    "types": ["electric"],
+    "preferredHabitats": ["electric-pole"],
+    "baseChance": 0.2,
+    "requirements": {
+      "minTiles": { "electric-pole": 1 }
+    }
+  },
+  "koffing": {
+    "id": "koffing",
+    "name": "Smogo",
+    "number": 109,
+    "types": ["poison"],
+    "preferredHabitats": ["trash-bin"],
+    "baseChance": 0.3,
+    "requirements": {
+      "minTiles": { "trash-bin": 2 }
+    }
+  },
+  "eevee": {
+    "id": "eevee",
+    "name": "Évoli",
+    "number": 133,
+    "types": ["normal"],
+    "preferredHabitats": ["grass", "flowers"],
+    "baseChance": 0.08,
+    "requirements": {
+      "minTiles": { "grass": 50, "flowers": 5 }
+    }
+  },
+  "dratini": {
+    "id": "dratini",
+    "name": "Minidraco",
+    "number": 147,
+    "types": ["dragon"],
+    "preferredHabitats": ["water", "pond"],
+    "baseChance": 0.05,
+    "requirements": {
+      "minTiles": { "water": 100, "pond": 2 }
+    }
+  },
+  "snorlax": {
+    "id": "snorlax",
+    "name": "Ronflex",
+    "number": 143,
+    "types": ["normal"],
+    "preferredHabitats": ["tree-large"],
+    "baseChance": 0.03,
+    "requirements": {
+      "minTiles": { "tree-large": 10, "grass": 200 }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+# Pokopia Planner - Git Ignore
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (si jamais utilisé)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.log
+*.tmp
+.cache/
+
+# Backups
+*.bak
+*.backup
+
+# Local env (si jamais utilisé)
+.env
+.env.local
+
+# Build output (si jamais utilisé)
+dist/
+build/
+out/
+
+# Test files temporaires
+test-*.html
+test-*.json
+
+# Screenshots temporaires
+screenshot-*.png

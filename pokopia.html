@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Pokopia Planner - Palette Town</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Segoe UI', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh; overflow: hidden;
+    }
+    
+    /* Interface principale comme ta capture */
+    .container {
+      display: flex; height: 100vh;
+    }
+    
+    /* Palette gauche (comme AC) */
+    .palette {
+      width: 220px; background: rgba(255,255,255,0.95);
+      border-right: 3px solid #ccc; padding: 20px;
+      overflow-y: auto;
+    }
+    .palette h3 { margin-bottom: 15px; color: #333; }
+    .tile-group { margin-bottom: 20px; }
+    .tile {
+      width: 48px; height: 48px; margin: 4px;
+      border: 2px solid transparent; cursor: grab;
+      background-size: cover; border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .tile:hover { border-color: #4CAF50; transform: scale(1.1); }
+    .tile:active { cursor: grabbing; }
+    
+    /* Canvas central */
+    .main { flex: 1; position: relative; background: #f0f8ff; }
+    #mapCanvas {
+      display: block; cursor: grab;
+      border: 2px solid #ddd; background: #90EE90;
+    }
+    #mapCanvas:active { cursor: grabbing; }
+    
+    /* Panneau droit infos */
+    .info-panel {
+      width: 280px; background: rgba(255,255,255,0.95);
+      border-left: 3px solid #ccc; padding: 20px;
+      overflow-y: auto;
+    }
+    .stat { display: flex; justify-content: space-between; margin: 8px 0; }
+    .stat-value { font-weight: bold; color: #4CAF50; }
+    
+    /* Toolbar haut */
+    .toolbar {
+      position: absolute; top: 10px; left: 50%; 
+      transform: translateX(-50%);
+      background: white; padding: 10px 20px;
+      border-radius: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      white-space: nowrap;
+    }
+    .tool-btn {
+      margin: 0 5px; padding: 8px 12px; 
+      border: none; border-radius: 20px;
+      background: #f0f0f0; cursor: pointer;
+      font-size: 14px;
+    }
+    .tool-btn.active { background: #4CAF50; color: white; }
+    
+    /* Menu accueil */
+    .welcome.hidden { display: none; }
+    .welcome {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); color: white;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    .city-btn {
+      padding: 15px 30px; margin: 10px;
+      background: #4CAF50; color: white;
+      border: none; border-radius: 10px;
+      font-size: 18px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Menu accueil -->
+  <div class="welcome" id="welcome">
+    <h1>🏗️ Pokopia Planner</h1>
+    <div>Choisis ta ville (384×384)</div>
+    <button class="city-btn" onclick="loadCity('palette-town')">Palette Town</button>
+    <button class="city-btn" onclick="loadCity('viridian')">Viridian City</button>
+    <button class="city-btn" onclick="loadCity('pewter')">Pewter City</button>
+    <button class="city-btn" onclick="loadCity('cerulean')">Cerulean City</button>
+    <button class="city-btn" onclick="loadCity('vermilion')">Vermilion City</button>
+  </div>
+
+  <div class="container" id="editor" style="display:none;">
+    <!-- Palette gauche -->
+    <div class="palette">
+      <h3>🏠 Bâtiments</h3>
+      <div class="tile-group">
+        <div class="tile" data-tile="pokecenter" draggable="true" 
+             style="background: linear-gradient(45deg, #ff6b6b, #feca57);"></div>
+        <div class="tile" data-tile="oak-house" draggable="true" 
+             style="background: linear-gradient(45deg, #48dbfb, #0abde3);"></div>
+      </div>
+      
+      <h3>💧 Décor</h3>
+      <div class="tile-group">
+        <div class="tile" data-tile="fountain" draggable="true" 
+             style="background: #2196F3;"></div>
+        <div class="tile" data-tile="tree" draggable="true" 
+             style="background: linear-gradient(#4CAF50, #2E7D32);"></div>
+        <div class="tile" data-tile="flowers" draggable="true" 
+             style="background: linear-gradient(45deg, #ff9a9e, #fecfef);"></div>
+      </div>
+      
+      <h3>🎨 Terrain</h3>
+      <div class="tile-group">
+        <div class="tile" data-tile="grass" draggable="true" 
+             style="background: #90EE90;"></div>
+        <div class="tile" data-tile="sand" draggable="true" 
+             style="background: #F4A460;"></div>
+        <div class="tile" data-tile="water" draggable="true" 
+             style="background: linear-gradient(#2196F3, #0D47A1);"></div>
+        <div class="tile" data-tile="rock" draggable="true" 
+             style="background: #B0BEC5;"></div>
+      </div>
+    </div>
+
+    <!-- Zone principale -->
+    <div class="main">
+      <div class="toolbar">
+        <button class="tool-btn active" id="brush">🖌️ Brosse</button>
+        <button class="tool-btn" id="erase">🧹 Gomme</button>
+        <button class="tool-btn" id="save">💾 Sauvegarder</button>
+        <button class="tool-btn" id="export">📤 PNG</button>
+        <button class="tool-btn" id="undo">↶</button>
+      </div>
+      <canvas id="mapCanvas" width="1536" height="1536"></canvas>
+    </div>
+
+    <!-- Panneau info droite -->
+    <div class="info-panel">
+      <h3>📊 Statistiques</h3>
+      <div class="stat"><span>Cases modifiées :</span><span class="stat-value" id="modified">0</span></div>
+      <div class="stat"><span>Pokémon attirés :</span><span class="stat-value" id="pokemon">12/300</span></div>
+      <div class="stat"><span>Score habitat :</span><span class="stat-value" id="score">87%</span></div>
+      <div class="stat"><span>Ressources :</span><span class="stat-value" id="resources">Bois: 245</span></div>
+    </div>
+  </div>
+
+  <script>
+    // État global
+    let currentCity = 'palette-town';
+    let mapData = Array(384).fill().map(() => Array(384).fill('grass'));
+    let canvas, ctx, zoom = 0.25, offsetX = 0, offsetY = 0;
+    let isDragging = false, dragStart = {x:0, y:0};
+    let currentTool = 'brush';
+    let history = []; // Undo
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      canvas = document.getElementById('mapCanvas');
+      ctx = canvas.getContext('2d');
+      canvas.width = 1536; canvas.height = 1536; // Double buffer
+      
+      initEventListeners();
+      renderMap();
+      updateStats();
+    });
+
+    function loadCity(city) {
+      currentCity = city;
+      document.getElementById('welcome').classList.add('hidden');
+      document.getElementById('editor').style.display = 'flex';
+      // Load template pour cette ville
+      renderMap();
+    }
+
+    function initEventListeners() {
+      // Drag palette
+      document.querySelectorAll('.tile').forEach(tile => {
+        tile.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', e.target.dataset.tile);
+        });
+      });
+
+      // Canvas events
+      canvas.addEventListener('mousedown', startDrag);
+      canvas.addEventListener('mousemove', dragMap);
+      canvas.addEventListener('mouseup', endDrag);
+      canvas.addEventListener('wheel', zoomMap);
+
+      // Drop
+      canvas.addEventListener('dragover', (e) => e.preventDefault());
+      canvas.addEventListener('drop', placeTile);
+
+      // Tools
+      document.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentTool = btn.id;
+        });
+      });
+
+      document.getElementById('save').onclick = saveMap;
+      document.getElementById('export').onclick = exportPNG;
+      document.getElementById('undo').onclick = undo;
+    }
+
+    // Coordonnées écran → monde
+    function screenToWorld(x, y) {
+      return {
+        x: Math.floor((x - offsetX) / zoom),
+        y: Math.floor((y - offsetY) / zoom)
+      };
+    }
+
+    function placeTile(e) {
+      e.preventDefault();
+      const tileId = e.dataTransfer.getData('text/plain');
+      if (currentTool !== 'brush') return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const worldPos = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
+      
+      if (worldPos.x >= 0 && worldPos.x < 384 && worldPos.y >= 0 && worldPos.y < 384) {
+        pushHistory();
+        mapData[worldPos.y][worldPos.x] = tileId;
+        renderMap();
+        updateStats();
+      }
+    }
+
+    function startDrag(e) {
+      if (e.button === 0) { // Clic gauche = drag map
+        isDragging = true;
+        dragStart = {x: e.clientX - offsetX, y: e.clientY - offsetY};
+      }
+    }
+
+    function dragMap(e) {
+      if (!isDragging) return;
+      offsetX = e.clientX - dragStart.x;
+      offsetY = e.clientY - dragStart.y;
+      renderMap();
+    }
+
+    function endDrag() { isDragging = false; }
+
+    function zoomMap(e) {
+      e.preventDefault();
+      const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      zoom *= zoomFactor;
+      zoom = Math.max(0.1, Math.min(2, zoom));
+      renderMap();
+    }
+
+    function renderMap() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Grille
+      ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+      ctx.lineWidth = 1 / zoom;
+      
+      // Rendu tiles visibles seulement
+      const startX = Math.max(0, Math.floor(-offsetX / zoom));
+      const endX = Math.min(384, Math.ceil((canvas.width - offsetX) / zoom));
+      const startY = Math.max(0, Math.floor(-offsetY / zoom));
+      const endY = Math.min(384, Math.ceil((canvas.height - offsetY) / zoom));
+      
+      for (let y = startY; y < endY; y++) {
+        for (let x = startX; x < endX; x++) {
+          drawTile(x, y, mapData[y][x]);
+        }
+      }
+    }
+
+    function drawTile(x, y, tileId) {
+      const screenX = x * zoom + offsetX;
+      const screenY = y * zoom + offsetY;
+      const size = 1 * zoom;
+      
+      // Couleur par tile type
+      const colors = {
+        'grass': '#90EE90', 'sand': '#F4A460', 'water': '#2196F3',
+        'rock': '#B0BEC5', 'pokecenter': '#ff6b6b', 'tree': '#4CAF50',
+        'flowers': '#ff9a9e', 'fountain': '#2196F3'
+      };
+      
+      ctx.fillStyle = colors[tileId] || '#90EE90';
+      ctx.fillRect(screenX, screenY, size, size);
+      
+      // Bordure grille
+      ctx.strokeRect(screenX, screenY, size, size);
+    }
+
+    function updateStats() {
+      const modified = mapData.flat().filter(t => t !== 'grass').length;
+      document.getElementById('modified').textContent = modified;
+      document.getElementById('pokemon').textContent = `${Math.min(300, modified * 2)}/300`;
+      document.getElementById('score').textContent = `${Math.min(100, (modified / 147456) * 100 | 0)}%`;
+    }
+
+    function pushHistory() {
+      history.push(JSON.parse(JSON.stringify(mapData)));
+      if (history.length > 20) history.shift();
+    }
+
+    function undo() {
+      if (history.length) {
+        mapData = history.pop();
+        renderMap();
+        updateStats();
+      }
+    }
+
+    function saveMap() {
+      const data = { city: currentCity, map: mapData, date: new Date().toISOString() };
+      localStorage.setItem(`pokopia-${currentCity}`, JSON.stringify(data));
+      alert('Sauvegardé !');
+    }
+
+    function exportPNG() {
+      const link = document.createElement('a');
+      link.download = `pokopia-${currentCity}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+</body>
+</html>
