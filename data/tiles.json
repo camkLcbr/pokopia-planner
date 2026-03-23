@@ -1,12 +1,4 @@
 {
-  "dark-blue": {
-    "id": "dark-blue",
-    "name": "Dark blue",
-    "category": "terrain",
-    "size": [1, 1],
-    "color": "#003366",
-    "sprite": null
-  },
   "water-blue": {
     "id": "water-blue",
     "name": "Water blue",
