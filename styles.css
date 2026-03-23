@@ -656,6 +656,64 @@ i[data-lucide] svg {
   bottom: 24px;
   left: 24px;
   background: #ffffff;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #726a5a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 2px solid #e8e6d8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoom-indicator button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: #fafaf8;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #726a5a;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.zoom-indicator button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.zoom-indicator button:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.zoom-indicator button:hover {
+  background: #35a043;
+  color: white;
+  transform: scale(1.05);
+}
+
+.zoom-indicator button:active {
+  transform: scale(0.95);
+}
+
+.zoom-indicator span {
+  padding: 0 12px;
+  min-width: 70px;
+  text-align: center;
+}
+
+.github-link {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: #ffffff;
   padding: 10px 16px;
   border-radius: 10px;
   font-size: 13px;
@@ -663,6 +721,19 @@ i[data-lucide] svg {
   color: #726a5a;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border: 2px solid #e8e6d8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.github-link:hover {
+  background: #24292e;
+  color: white;
+  border-color: #24292e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(36,41,46,0.2);
 }
 
 /* =========================
