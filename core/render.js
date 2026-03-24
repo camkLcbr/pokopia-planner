@@ -4,10 +4,11 @@
  */
 
 export class CanvasRenderer {
-  constructor(canvas, tilesData) {
+  constructor(canvas, tilesData, buildingsData = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.tilesData = tilesData;
+    this.buildingsData = buildingsData;
 
     // Transformation viewport
     this.zoom = 0.4; // Niveau de zoom initial (40%)
@@ -36,6 +37,8 @@ export class CanvasRenderer {
     // Brush preview state
     this.brushPreviewPos = null; // { worldX, worldY }
     this.brushPreviewSize = 1;
+    this.brushPreviewWidth = 1; // Pour les bâtiments
+    this.brushPreviewDepth = 1; // Pour les bâtiments
     this.showBrushPreview = false;
 
     // Callback pour notifier qu'il faut re-render
@@ -136,6 +139,9 @@ export class CanvasRenderer {
   render(mapGrid, backgroundImage = null) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    // Stocke la référence au mapGrid pour pouvoir vérifier les tuiles adjacentes
+    this.currentMapGrid = mapGrid;
+
     // Calcul zone visible (optimisation)
     const visibleBounds = this.getVisibleBounds();
 
@@ -187,26 +193,53 @@ export class CanvasRenderer {
    * Rendu d'une tuile individuelle
    */
   renderTile(worldX, worldY, tileId) {
-    const tileInfo = this.tilesData[tileId];
+    // Cherche dans tiles ET buildings
+    const tileInfo = this.tilesData[tileId] || this.buildingsData[tileId];
     if (!tileInfo) return;
 
     const screen = this.worldToScreen(worldX, worldY);
     const size = this.tileSize * this.zoom;
 
-    // Si sprite disponible
-    if (tileInfo.sprite && this.spriteCache[tileInfo.sprite]) {
-      this.ctx.drawImage(
-        this.spriteCache[tileInfo.sprite],
-        screen.x,
-        screen.y,
-        size,
-        size
-      );
+    // Si c'est un bâtiment multi-cases, dessine seulement depuis le coin haut-gauche
+    const isBuilding = tileInfo.width > 1 || tileInfo.depth > 1;
+
+    if (isBuilding) {
+      // Pour un bâtiment, on vérifie si on est au coin haut-gauche
+      // On détecte le coin haut-gauche en vérifiant si les cases à gauche/au-dessus ont un ID différent
+      const isTopLeftCorner = this.isBuildingTopLeft(worldX, worldY, tileId);
+
+      if (isTopLeftCorner && tileInfo.sprite && this.spriteCache[tileInfo.sprite]) {
+        // Dessine le sprite du bâtiment sur toute sa zone
+        this.ctx.drawImage(
+          this.spriteCache[tileInfo.sprite],
+          screen.x,
+          screen.y,
+          size * tileInfo.width,
+          size * tileInfo.depth
+        );
+      } else if (isTopLeftCorner) {
+        // Fallback : couleur de fond pour le bâtiment entier
+        this.ctx.fillStyle = tileInfo.color || '#90EE90';
+        this.ctx.fillRect(screen.x, screen.y, size * tileInfo.width, size * tileInfo.depth);
+      }
+      // Si ce n'est pas le coin haut-gauche, on ne dessine rien (le sprite est déjà dessiné)
     } else {
-      // Sinon, couleur de fallback
+      // Tile normale (1×1) - toujours afficher la couleur, jamais le sprite
       this.ctx.fillStyle = tileInfo.color || '#90EE90';
       this.ctx.fillRect(screen.x, screen.y, size, size);
     }
+  }
+
+  /**
+   * Vérifie si une position est le coin haut-gauche d'un bâtiment
+   */
+  isBuildingTopLeft(x, y, tileId) {
+    // Vérifie si les cases à gauche ET au-dessus ont un ID différent (ou hors limites)
+    const leftTile = x > 0 ? this.currentMapGrid?.getTile(x - 1, y) : null;
+    const topTile = y > 0 ? this.currentMapGrid?.getTile(x, y - 1) : null;
+
+    // On est au coin supérieur gauche si les cases à gauche ET au-dessus sont différentes
+    return leftTile !== tileId && topTile !== tileId;
   }
 
   /**
@@ -297,16 +330,28 @@ export class CanvasRenderer {
   }
 
   /**
-   * Précharge tous les sprites
+   * Précharge tous les sprites (tiles + buildings)
    */
   async preloadSprites(tilesData) {
     const promises = [];
 
+    // Précharge les sprites des tiles
     for (const [tileId, tileInfo] of Object.entries(tilesData)) {
       if (tileInfo.sprite) {
         promises.push(
           this.loadSprite(tileId, tileInfo.sprite).catch(() => {
             console.warn(`Failed to load sprite: ${tileInfo.sprite}`);
+          })
+        );
+      }
+    }
+
+    // Précharge les sprites des buildings
+    for (const [buildingId, buildingInfo] of Object.entries(this.buildingsData)) {
+      if (buildingInfo.sprite) {
+        promises.push(
+          this.loadSprite(buildingId, buildingInfo.sprite).catch(() => {
+            console.warn(`Failed to load building sprite: ${buildingInfo.sprite}`);
           })
         );
       }
@@ -521,9 +566,14 @@ export class CanvasRenderer {
   /**
    * Met à jour la position de l'aperçu du pinceau
    */
-  setBrushPreview(worldX, worldY, size, show) {
+  setBrushPreview(worldX, worldY, size, show, width = null, depth = null, tileId = null) {
+    console.log('🎨 Renderer.setBrushPreview reçoit:', { width, depth, size, tileId });
     this.brushPreviewPos = { worldX, worldY };
     this.brushPreviewSize = size;
+    this.brushPreviewWidth = width || size;
+    this.brushPreviewDepth = depth || size;
+    this.brushPreviewTileId = tileId; // Stocke l'ID de la tuile/bâtiment pour afficher le sprite
+    console.log('🎨 Renderer dimensions finales:', this.brushPreviewWidth, this.brushPreviewDepth);
     this.showBrushPreview = show;
   }
 
@@ -534,30 +584,61 @@ export class CanvasRenderer {
     if (!this.brushPreviewPos) return;
 
     const { worldX, worldY } = this.brushPreviewPos;
-    const size = this.brushPreviewSize;
-    const half = Math.floor(size / 2);
+    const width = this.brushPreviewWidth;
+    const depth = this.brushPreviewDepth;
+    console.log('🖼️ Rendering preview avec dimensions:', width, depth);
 
-    // Dessine un rectangle semi-transparent pour chaque tuile affectée
-    this.ctx.fillStyle = 'rgba(76, 175, 80, 0.3)'; // Vert semi-transparent
-    this.ctx.strokeStyle = 'rgba(76, 175, 80, 0.8)'; // Bordure verte
-    this.ctx.lineWidth = Math.max(1, this.zoom * 2);
+    // Vérifie si c'est un bâtiment (width > 1 OU depth > 1)
+    const isBuilding = width > 1 || depth > 1;
+    const tileData = this.brushPreviewTileId ?
+      (this.tilesData[this.brushPreviewTileId] || this.buildingsData[this.brushPreviewTileId]) :
+      null;
+    const sprite = tileData?.sprite;
+    const spriteImg = sprite ? this.spriteCache[sprite] : null;
 
-    // Parcourt les tuiles du brush (pattern carré)
-    for (let dy = 0; dy < size; dy++) {
-      for (let dx = 0; dx < size; dx++) {
-        const tx = worldX - half + dx;
-        const ty = worldY - half + dy;
+    // Si c'est un bâtiment avec un sprite, l'afficher avec transparence
+    if (spriteImg && isBuilding) {
+      const screen = this.worldToScreen(worldX, worldY);
+      const tileSize = this.tileSize * this.zoom;
 
-        // Vérifie que la tuile est dans les limites
-        if (tx >= 0 && tx < 384 && ty >= 0 && ty < 384) {
-          const screen = this.worldToScreen(tx, ty);
-          const tileSize = this.tileSize * this.zoom;
+      // Sauvegarde l'état du contexte
+      this.ctx.save();
+      this.ctx.globalAlpha = 0.7; // Transparence pour le preview
 
-          // Remplit la tuile
-          this.ctx.fillRect(screen.x, screen.y, tileSize, tileSize);
+      // Dessine le sprite sur toute la zone du bâtiment
+      this.ctx.drawImage(
+        spriteImg,
+        screen.x,
+        screen.y,
+        tileSize * width,
+        tileSize * depth
+      );
 
-          // Bordure
-          this.ctx.strokeRect(screen.x, screen.y, tileSize, tileSize);
+      this.ctx.restore();
+
+      // Bordure verte autour du bâtiment
+      this.ctx.strokeStyle = 'rgba(76, 175, 80, 0.8)';
+      this.ctx.lineWidth = Math.max(2, this.zoom * 2);
+      this.ctx.strokeRect(screen.x, screen.y, tileSize * width, tileSize * depth);
+    } else {
+      // Fallback : rectangle semi-transparent vert (pour tiles ou bâtiments sans sprite)
+      this.ctx.fillStyle = 'rgba(76, 175, 80, 0.3)';
+      this.ctx.strokeStyle = 'rgba(76, 175, 80, 0.8)';
+      this.ctx.lineWidth = Math.max(1, this.zoom * 2);
+
+      // Parcourt les tuiles du brush
+      for (let dy = 0; dy < depth; dy++) {
+        for (let dx = 0; dx < width; dx++) {
+          const tx = worldX + dx;
+          const ty = worldY + dy;
+
+          if (tx >= 0 && tx < 384 && ty >= 0 && ty < 384) {
+            const screen = this.worldToScreen(tx, ty);
+            const tileSize = this.tileSize * this.zoom;
+
+            this.ctx.fillRect(screen.x, screen.y, tileSize, tileSize);
+            this.ctx.strokeRect(screen.x, screen.y, tileSize, tileSize);
+          }
         }
       }
     }

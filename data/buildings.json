@@ -1,0 +1,353 @@
+{
+  "leaf-hut": {
+    "id": "leaf-hut",
+    "name": "Leaf hut",
+    "name_fr": "Cabane feuille",
+    "category": "kit",
+    "width": 2,
+    "depth": 3,
+    "sprite": "sprites/buildings/leafhutkit.png"
+  },
+  "leaf-cottage": {
+    "id": "leaf-cottage",
+    "name": "Leaf cottage",
+    "name_fr": "Maison feuille",
+    "category": "kit",
+    "width": 5,
+    "depth": 4,
+    "sprite": "sprites/buildings/leafcottagekit.png"
+  },
+  "leaf-house": {
+    "id": "leaf-house",
+    "name": "Leaf house",
+    "name_fr": "Grande maison feuille",
+    "category": "kit",
+    "width": 8,
+    "depth": 6,
+    "sprite": "sprites/buildings/leafhousekit.png"
+  },
+  "leaf-den": {
+    "id": "leaf-den",
+    "name": "Leaf den",
+    "name_fr": "Tanière feuille",
+    "category": "kit",
+    "width": 2,
+    "depth": 2,
+    "sprite": "sprites/buildings/leafdenkit.png"
+  },
+  "sand-hut": {
+    "id": "sand-hut",
+    "name": "Sand hut",
+    "name_fr": "Cabane sable",
+    "category": "kit",
+    "width": 3,
+    "depth": 3,
+    "sprite": "sprites/buildings/sandhutkit.png"
+  },
+  "sand-cottage": {
+    "id": "sand-cottage",
+    "name": "Sand cottage",
+    "name_fr": "Maison sable",
+    "category": "kit",
+    "width": 5,
+    "depth": 4,
+    "sprite": "sprites/buildings/sandcottagekit.png"
+  },
+  "sand-house": {
+    "id": "sand-house",
+    "name": "Sand house",
+    "name_fr": "Grande maison sable",
+    "category": "kit",
+    "width": 8,
+    "depth": 6,
+    "sprite": "sprites/buildings/sandhousekit.png"
+  },
+  "stone-den": {
+    "id": "stone-den",
+    "name": "Stone den",
+    "name_fr": "Tanière pierre",
+    "category": "kit",
+    "width": 2,
+    "depth": 2,
+    "sprite": "sprites/buildings/stonedenkit.png"
+  },
+  "stone-hut": {
+    "id": "stone-hut",
+    "name": "Stone hut",
+    "name_fr": "Cabane pierre",
+    "category": "kit",
+    "width": 3,
+    "depth": 3,
+    "sprite": "sprites/buildings/stonehutkit.png"
+  },
+  "stone-cottage": {
+    "id": "stone-cottage",
+    "name": "Stone cottage",
+    "name_fr": "Maison pierre",
+    "category": "kit",
+    "width": 5,
+    "depth": 4,
+    "sprite": "sprites/buildings/stonecottagekit.png"
+  },
+  "stone-house": {
+    "id": "stone-house",
+    "name": "Stone house",
+    "name_fr": "Grande maison pierre",
+    "category": "kit",
+    "width": 8,
+    "depth": 6,
+    "sprite": "sprites/buildings/stonehousekit.png"
+  },
+  "city-hut": {
+    "id": "city-hut",
+    "name": "City hut",
+    "name_fr": "Cabane ville",
+    "category": "kit",
+    "width": 3,
+    "depth": 3,
+    "sprite": "sprites/buildings/cityhutkit.png"
+  },
+  "city-cottage": {
+    "id": "city-cottage",
+    "name": "City cottage",
+    "name_fr": "Maison ville",
+    "category": "kit",
+    "width": 5,
+    "depth": 4,
+    "sprite": "sprites/buildings/citycottagekit.png"
+  },
+  "city-house": {
+    "id": "city-house",
+    "name": "City house",
+    "name_fr": "Grande maison ville",
+    "category": "kit",
+    "width": 8,
+    "depth": 6,
+    "sprite": "sprites/buildings/cityhousekit.png"
+  },
+  "pokeball-house": {
+    "id": "pokeball-house",
+    "name": "Poké Ball house",
+    "name_fr": "Maison Poké Ball",
+    "category": "kit",
+    "width": 5,
+    "depth": 5,
+    "sprite": "sprites/buildings/pokeballhousekit.png"
+  },
+  "pokemart": {
+    "id": "pokemart",
+    "name": "Poké Mart",
+    "name_fr": "Poké Mart",
+    "category": "kit",
+    "width": 4,
+    "depth": 3,
+    "sprite": "sprites/buildings/pokemartkit.png"
+  },
+  "pokemon-center": {
+    "id": "pokemon-center",
+    "name": "Pokémon Center",
+    "name_fr": "Centre Pokémon",
+    "category": "kit",
+    "width": 6,
+    "depth": 4,
+    "sprite": "sprites/buildings/pokemoncenterkit.png"
+  },
+  "windmill": {
+    "id": "windmill",
+    "name": "Windmill",
+    "name_fr": "Moulin à vent",
+    "category": "kit",
+    "width": 2,
+    "depth": 2,
+    "sprite": "sprites/buildings/windmillkit.png"
+  },
+  "waterwheel": {
+    "id": "waterwheel",
+    "name": "Waterwheel",
+    "name_fr": "Moulin à eau",
+    "category": "kit",
+    "width": 3,
+    "depth": 2,
+    "sprite": "sprites/buildings/waterwheelkit.png"
+  },
+  "charging-station": {
+    "id": "charging-station",
+    "name": "Charging station",
+    "name_fr": "Borne de recharge",
+    "category": "kit",
+    "width": 3,
+    "depth": 3,
+    "sprite": "sprites/buildings/chargingstationkit.png"
+  },
+  "pikachu-fountain": {
+    "id": "pikachu-fountain",
+    "name": "Pikachu fountain",
+    "name_fr": "Fontaine Pikachu",
+    "category": "kit",
+    "width": 6,
+    "depth": 6,
+    "sprite": "sprites/buildings/pikachufountainkit.png"
+  },
+  "moonlight-dance-statue": {
+    "id": "moonlight-dance-statue",
+    "name": "Moonlight dance statue",
+    "name_fr": "Statue de la danse lunaire",
+    "category": "kit",
+    "width": 4,
+    "depth": 3,
+    "sprite": "sprites/buildings/moonlightdancestatuekit.png"
+  },
+  "pink-hut": {
+    "id": "pink-hut",
+    "name": "Pink hut",
+    "name_fr": "Cabane rose",
+    "category": "kit",
+    "width": 6,
+    "depth": 6,
+    "sprite": "sprites/buildings/pinkhutkit.png"
+  },
+  "pink-cottage": {
+    "id": "pink-cottage",
+    "name": "Pink cottage",
+    "name_fr": "Maison rose",
+    "category": "kit",
+    "width": 8,
+    "depth": 8,
+    "sprite": "sprites/buildings/pinkcottagekit.png"
+  },
+  "orange-hut": {
+    "id": "orange-hut",
+    "name": "Orange hut",
+    "name_fr": "Cabane orange",
+    "category": "kit",
+    "width": 6,
+    "depth": 6,
+    "sprite": "sprites/buildings/orangehutkit.png"
+  },
+  "orange-cottage": {
+    "id": "orange-cottage",
+    "name": "Orange cottage",
+    "name_fr": "Maison orange",
+    "category": "kit",
+    "width": 8,
+    "depth": 8,
+    "sprite": "sprites/buildings/orangecottagekit.png"
+  },
+  "gray-hut": {
+    "id": "gray-hut",
+    "name": "Gray hut",
+    "name_fr": "Cabane grise",
+    "category": "kit",
+    "width": 8,
+    "depth": 6,
+    "sprite": "sprites/buildings/grayhutkit.png"
+  },
+  "gray-cottage": {
+    "id": "gray-cottage",
+    "name": "Gray cottage",
+    "name_fr": "Maison grise",
+    "category": "kit",
+    "width": 8,
+    "depth": 9,
+    "sprite": "sprites/buildings/graycottagekit.png"
+  },
+  "yellow-cottage": {
+    "id": "yellow-cottage",
+    "name": "Yellow cottage",
+    "name_fr": "Maison jaune",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/yellowcottagekit.png"
+  },
+  "yellow-hut": {
+    "id": "yellow-hut",
+    "name": "Yellow hut",
+    "name_fr": "Cabane jaune",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/yellowhutkit.png"
+  },
+  "small-office": {
+    "id": "small-office",
+    "name": "Small office",
+    "name_fr": "Petit bureau",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/smallofficekit.png"
+  },
+  "log-cabin": {
+    "id": "log-cabin",
+    "name": "Log cabin",
+    "name_fr": "Cabane en rondins",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/logcabinkit.png"
+  },
+  "stylish-cafe": {
+    "id": "stylish-cafe",
+    "name": "Stylish Café",
+    "name_fr": "Café stylé",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/stylishcafekit.png"
+  },
+  "concert-stage": {
+    "id": "concert-stage",
+    "name": "Concert stage",
+    "name_fr": "Scène de concert",
+    "category": "kit",
+    "width": 10,
+    "depth": 10,
+    "sprite": "sprites/buildings/concertstagekit.png"
+  },
+  "fountain-plaza": {
+    "id": "fountain-plaza",
+    "name": "Fountain Plaza",
+    "name_fr": "Place de la fontaine",
+    "category": "kit",
+    "width": 9,
+    "depth": 10,
+    "sprite": "sprites/buildings/fountainplazakit.png"
+  },
+  "altar-of-flame": {
+    "id": "altar-of-flame",
+    "name": "Altar of Flame",
+    "name_fr": "Autel de la flamme",
+    "category": "kit",
+    "width": 35,
+    "depth": 42,
+    "sprite": "sprites/buildings/altarofflamekit.png"
+  },
+  "abandoned-power-plant": {
+    "id": "abandoned-power-plant",
+    "name": "Abandoned Power Plant",
+    "name_fr": "Centrale électrique abandonnée",
+    "category": "kit",
+    "width": 31,
+    "depth": 29,
+    "sprite": "sprites/buildings/abandonedpowerplantkit.png"
+  },
+  "freezing-chambers": {
+    "id": "freezing-chambers",
+    "name": "Freezing Chambers",
+    "name_fr": "Chambres de congélation",
+    "category": "kit",
+    "width": 42,
+    "depth": 26,
+    "sprite": "sprites/buildings/freezingchamberskit.png"
+  },
+  "city-den": {
+    "id": "city-den",
+    "name": "City den",
+    "name_fr": "Tanière ville",
+    "category": "kit",
+    "width": 2,
+    "depth": 2,
+    "sprite": "sprites/buildings/citydenkit.png"
+  }
+}

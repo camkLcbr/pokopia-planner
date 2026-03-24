@@ -23,6 +23,7 @@ const translations = {
     // Category Toolbar - Subcategories
     'subcategory.nature': 'Nature',
     'subcategory.chemins': 'Chemins',
+    'subcategory.kit': 'Kit',
 
     // Category Toolbar - Tools
     'tool.brush': 'Brosse',
@@ -84,6 +85,7 @@ const translations = {
     // Category Toolbar - Subcategories
     'subcategory.nature': 'Nature',
     'subcategory.chemins': 'Paths',
+    'subcategory.kit': 'Kit',
 
     // Category Toolbar - Tools
     'tool.brush': 'Brush',

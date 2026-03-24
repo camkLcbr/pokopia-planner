@@ -11,6 +11,8 @@ export class ToolSystem {
     this.currentTile = 'grass';
     this.isDrawing = false;
     this.brushSize = 1; // Taille du pinceau (1×1, 2×2, etc.)
+    this.buildingWidth = 1; // Largeur du bâtiment
+    this.buildingDepth = 1; // Profondeur du bâtiment
 
     // Pour outil rectangle
     this.rectStart = null;
@@ -37,6 +39,16 @@ export class ToolSystem {
    */
   setBrushSize(size) {
     this.brushSize = Math.max(1, Math.min(16, size));
+  }
+
+  /**
+   * Définit les dimensions du bâtiment
+   */
+  setBuildingDimensions(width, depth) {
+    console.log('🔧 ToolSystem.setBuildingDimensions appelé:', width, depth);
+    this.buildingWidth = width;
+    this.buildingDepth = depth;
+    console.log('✅ Dimensions stockées:', this.buildingWidth, this.buildingDepth);
   }
 
   /**
@@ -129,17 +141,18 @@ export class ToolSystem {
    * Applique le pinceau
    */
   applyBrush(x, y) {
-    // Calcul pour obtenir un carré parfait de taille brushSize×brushSize
-    // Pour brushSize=1: dessine 1 tuile à (x, y)
-    // Pour brushSize=2: dessine 2×2 tuiles centré sur (x, y)
-    // Pour brushSize=4: dessine 4×4 tuiles centré sur (x, y)
-    const half = Math.floor(this.brushSize / 2);
-    const offset = this.brushSize % 2 === 0 ? 0 : 0; // Pas d'offset pour pairs/impairs
+    // Pour les bâtiments, on utilise les dimensions du bâtiment
+    // Pour les tuiles normales, on utilise brushSize
+    const width = this.buildingWidth > 1 ? this.buildingWidth : this.brushSize;
+    const depth = this.buildingDepth > 1 ? this.buildingDepth : this.brushSize;
 
-    for (let dy = 0; dy < this.brushSize; dy++) {
-      for (let dx = 0; dx < this.brushSize; dx++) {
-        const targetX = x - half + dx;
-        const targetY = y - half + dy;
+    console.log('🖌️ applyBrush avec dimensions:', width, depth, 'brushSize:', this.brushSize);
+
+    // Place le bâtiment/tuile en partant du coin haut-gauche
+    for (let dy = 0; dy < depth; dy++) {
+      for (let dx = 0; dx < width; dx++) {
+        const targetX = x + dx;
+        const targetY = y + dy;
         this.mapGrid.setTile(targetX, targetY, this.currentTile, true);
       }
     }

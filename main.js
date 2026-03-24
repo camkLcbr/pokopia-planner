@@ -16,6 +16,7 @@ import { t } from './utils/i18n.js';
 class PokopiaPlannerApp {
   constructor() {
     this.tilesData = null;
+    this.buildingsData = null;
     this.citiesData = null;
     this.pokemonData = null;
 
@@ -66,17 +67,19 @@ class PokopiaPlannerApp {
    */
   async loadData() {
     try {
-      const [tilesRes, citiesRes, pokemonRes] = await Promise.all([
+      const [tilesRes, buildingsRes, citiesRes, pokemonRes] = await Promise.all([
         fetch('./data/tiles.json'),
+        fetch('./data/buildings.json'),
         fetch('./data/cities.json'),
         fetch('./data/pokemon.json')
       ]);
 
       this.tilesData = await tilesRes.json();
+      this.buildingsData = await buildingsRes.json();
       this.citiesData = await citiesRes.json();
       this.pokemonData = await pokemonRes.json();
 
-      console.log(`📦 Chargé: ${Object.keys(this.tilesData).length} tuiles, ${Object.keys(this.citiesData).length} villes, ${Object.keys(this.pokemonData).length} Pokémon`);
+      console.log(`📦 Chargé: ${Object.keys(this.tilesData).length} tuiles, ${Object.keys(this.buildingsData).length} bâtiments, ${Object.keys(this.citiesData).length} villes, ${Object.keys(this.pokemonData).length} Pokémon`);
     } catch (error) {
       console.error('❌ Erreur chargement données:', error);
       alert('Erreur de chargement des données. Vérifie la console.');
@@ -109,7 +112,12 @@ class PokopiaPlannerApp {
     }
 
     // Renderer
-    this.renderer = new CanvasRenderer(this.canvas, this.tilesData);
+    this.renderer = new CanvasRenderer(this.canvas, this.tilesData, this.buildingsData);
+
+    // Précharge tous les sprites (tiles + buildings)
+    this.renderer.preloadSprites(this.tilesData).then(() => {
+      console.log('✅ Sprites préchargés');
+    });
 
     // Callback pour re-render lors des gestes tactiles
     this.renderer.onRenderNeeded = () => {
@@ -206,6 +214,7 @@ class PokopiaPlannerApp {
         this.categoryToolbar = new CategoryToolbar(
           'category-toolbar',
           this.tilesData,
+          this.buildingsData,
           (tileId, tile) => this.handleTileSelect(tileId, tile)
         );
 
@@ -321,13 +330,27 @@ class PokopiaPlannerApp {
   }
 
   /**
-   * Gestion de la sélection de tuile
+   * Gestion de la sélection de tuile/bâtiment
    */
   handleTileSelect(tileId) {
-    console.log('🎨 Tuile sélectionnée:', tileId);
+    console.log('🎨 Tuile/Bâtiment sélectionné:', tileId);
+
+    // Vérifie si c'est un bâtiment ou une tuile
+    const building = this.buildingsData?.[tileId];
+    console.log('🏗️ Building détecté:', building);
 
     if (this.toolSystem) {
       this.toolSystem.setTile(tileId);
+
+      // Si c'est un bâtiment, passe les dimensions au toolSystem
+      if (building) {
+        console.log(`📐 Dimensions du bâtiment: ${building.width}×${building.depth}`);
+        this.toolSystem.setBuildingDimensions(building.width, building.depth);
+      } else {
+        // Réinitialise aux dimensions normales (1×1)
+        console.log('📐 Réinitialisation aux dimensions 1×1');
+        this.toolSystem.setBuildingDimensions(1, 1);
+      }
     }
 
     // Met à jour le curseur pour le brush (activé automatiquement)
@@ -816,12 +839,29 @@ class PokopiaPlannerApp {
       // Convertit position souris en coordonnées grille
       const world = this.renderer.screenToWorld(mouseX, mouseY);
 
-      // Met à jour l'aperçu dans le renderer
+      // Pour l'outil erase, toujours utiliser brushSize
+      // Pour brush, utilise les dimensions du bâtiment si > 1, sinon brushSize
+      let previewWidth, previewDepth;
+      if (currentTool === 'erase') {
+        previewWidth = this.toolSystem.brushSize;
+        previewDepth = this.toolSystem.brushSize;
+      } else {
+        previewWidth = this.toolSystem.buildingWidth > 1 ? this.toolSystem.buildingWidth : this.toolSystem.brushSize;
+        previewDepth = this.toolSystem.buildingDepth > 1 ? this.toolSystem.buildingDepth : this.toolSystem.brushSize;
+      }
+
+      console.log('🖱️ Preview dimensions:', previewWidth, previewDepth, 'brushSize:', this.toolSystem.brushSize, 'tool:', currentTool);
+
+      // Met à jour l'aperçu dans le renderer avec les dimensions calculées
+      // Passe aussi le tileId pour afficher le sprite dans le preview
       this.renderer.setBrushPreview(
         world.x,
         world.y,
         this.toolSystem.brushSize,
-        true
+        true,
+        previewWidth,
+        previewDepth,
+        this.toolSystem.currentTile // ID de la tuile/bâtiment sélectionné
       );
 
       // Re-render pour afficher l'aperçu

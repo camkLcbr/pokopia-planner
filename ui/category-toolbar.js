@@ -6,7 +6,7 @@ import { icon, initIcons, categoryIcons, toolIcons } from '../utils/icons.js';
 import { i18n, t } from '../utils/i18n.js';
 
 export class CategoryToolbar {
-  constructor(containerId, tilesData, onTileSelect) {
+  constructor(containerId, tilesData, buildingsData, onTileSelect) {
     this.container = document.getElementById(containerId);
 
     if (!this.container) {
@@ -15,6 +15,7 @@ export class CategoryToolbar {
     }
 
     this.tilesData = tilesData;
+    this.buildingsData = buildingsData;
     this.onTileSelect = onTileSelect;
 
     this.currentCategory = null;
@@ -33,7 +34,10 @@ export class CategoryToolbar {
       buildings: {
         icon: categoryIcons.buildings,
         nameKey: 'category.buildings',
-        filter: (tile) => tile.category === 'buildings'
+        dataSource: 'buildings', // Indique qu'on utilise buildingsData au lieu de tilesData
+        filter: (building) => building.category === 'buildings',
+        hasSubcategories: true, // Indique que cette catégorie a des sous-catégories
+        subcategories: ['kit'] // Liste des sous-catégories (pour l'instant seulement kit)
       },
       decor: {
         icon: categoryIcons.decor,
@@ -199,17 +203,20 @@ export class CategoryToolbar {
   }
 
   /**
-   * Sélectionne une sous-catégorie et affiche ses tiles
+   * Sélectionne une sous-catégorie et affiche ses tiles/buildings
    */
   selectSubcategory(subcategory) {
     this.currentSubcategory = subcategory;
     const categoryData = this.categories[this.currentCategory];
 
-    // Filtre les tiles par catégorie ET sous-catégorie
-    const filter = (tile) =>
-      categoryData.filter(tile) && tile.subcategory === subcategory;
+    // Filtre les items par catégorie ET sous-catégorie
+    // Pour buildings, filter par la catégorie du building (ex: 'kit')
+    // Pour tiles, filter par la subcategory du tile (ex: 'nature', 'chemins')
+    const filter = categoryData.dataSource === 'buildings'
+      ? (item) => item.category === subcategory
+      : (item) => categoryData.filter(item) && item.subcategory === subcategory;
 
-    this.renderTilesSecondary({ filter });
+    this.renderTilesSecondary({ filter, dataSource: categoryData.dataSource });
   }
 
   /**
@@ -217,27 +224,35 @@ export class CategoryToolbar {
    */
   renderTilesSecondary(categoryData) {
     const secondaryToolbar = document.getElementById('secondary-toolbar');
-    const tiles = Object.values(this.tilesData).filter(categoryData.filter);
 
-    if (tiles.length === 0) {
+    // Détermine la source de données (buildings ou tiles)
+    const dataSource = categoryData.dataSource === 'buildings' ? this.buildingsData : this.tilesData;
+    const items = Object.values(dataSource).filter(categoryData.filter);
+
+    if (items.length === 0) {
       secondaryToolbar.innerHTML = `<div style="padding: 8px; color: #666; font-size: 12px;">${t('brush.noTiles')}</div>`;
       return;
     }
 
-    secondaryToolbar.innerHTML = tiles.map(tile => {
-      // Si le tile a un sprite, on affiche l'image, sinon on garde la couleur
-      const backgroundStyle = tile.sprite
-        ? `background-image: url('${tile.sprite}'); background-size: cover; background-position: center;`
-        : `background: ${tile.gradient || tile.color};`;
+    secondaryToolbar.innerHTML = items.map(item => {
+      // Si l'item a un sprite, on affiche l'image, sinon on garde la couleur
+      const backgroundStyle = item.sprite
+        ? `background-image: url('${item.sprite}'); background-size: cover; background-position: center;`
+        : `background: ${item.gradient || item.color};`;
+
+      // Pour les bâtiments, affiche les dimensions dans le nom
+      const displayName = item.width && item.depth
+        ? `${item.name} (${item.width}×${item.depth})`
+        : item.name;
 
       return `
         <button
-          class="tile-btn ${tile.sprite ? 'has-sprite' : ''}"
-          data-tile="${tile.id}"
-          title="${tile.name}"
+          class="tile-btn ${item.sprite ? 'has-sprite' : ''}"
+          data-tile="${item.id}"
+          title="${displayName}"
           style="${backgroundStyle}"
         >
-          <span class="tile-name">${tile.name}</span>
+          <span class="tile-name">${displayName}</span>
         </button>
       `;
     }).join('');
@@ -353,10 +368,12 @@ export class CategoryToolbar {
   }
 
   /**
-   * Sélectionne une tuile
+   * Sélectionne une tuile ou un bâtiment
    */
   selectTile(tileId) {
-    const tile = this.tilesData[tileId];
+    // Cherche dans les tiles ET dans les buildings
+    const tile = this.tilesData[tileId] || this.buildingsData[tileId];
+
     if (tile && this.onTileSelect) {
       this.onTileSelect(tileId, tile);
     }
